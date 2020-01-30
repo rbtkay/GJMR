@@ -6,15 +6,15 @@ const bodyParser = require('body-parser');
 const hostname = '0.0.0.0';
 const port = 3000;
 
-mongoose.connect('mongodb://mongo/db_feedback_ipssi');
+mongoose.connect(`mongodb://mongo/${process.env.DB_NAME}`);
 
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
 
-server.get('/', (req, res) => {
-    res.type('html');
-    res.status(200);
-    res.end('<h1>This is the beginning</h1>')
+server.get('/', (request, response) => {
+    response.type('html');
+    response.status(200);
+    response.end('<h1>This is the beginning</h1>')
 })
 
 server.listen(port, hostname);
