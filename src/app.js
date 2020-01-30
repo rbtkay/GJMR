@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const hostname = '0.0.0.0';
 const port = 3000;
 
-mongoose.connect('mongodb://mongo/db_intervenant_notation');
+mongoose.connect('mongodb://mongo/db_feedback_ipssi');
 
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
