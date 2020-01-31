@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let schoolYearOfStudentSchema = new Schema({
+let schoolYearOfStudentModel = new Schema({
     student_id: {
         type: String,
         required: true
