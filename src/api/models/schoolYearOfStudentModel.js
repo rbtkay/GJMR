@@ -6,7 +6,7 @@ let schoolYearOfStudentSchema = new Schema({
         type: String,
         required: true
     },
-    schoolYear_id: {
+    school_year_id: {
         type: String,
         required: true
     }

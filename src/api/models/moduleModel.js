@@ -10,7 +10,7 @@ let ModuleSchema = new Schema({
         type: String,
         required: true
     },
-    prof_id: {
+    teacher_id: {
         type: String,
         required: true
     }
