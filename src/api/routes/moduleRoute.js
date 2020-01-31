@@ -5,6 +5,7 @@ const moduleController = require('../controllers/moduleController');
 
 module.exports = (app) => {
     app.route('/modules')
-        .get(moduleController.get_modules);
+        .get(moduleController.get_modules)
+        .post(moduleController.create_a_module)
         
 }
