@@ -17,4 +17,10 @@ server.get('/', (request, response) => {
     response.end('<h1>This is the beginning</h1>')
 })
 
+
+
+const moduleRoute = require('./api/routes/moduleRoute');
+moduleRoute(server);
+
 server.listen(port, hostname);
+
