@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 let NoteSchema = new Schema({
-    content: {
+    value: {
+
         type: Number,
         required: true
     },
@@ -20,4 +21,5 @@ let NoteSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Note', NoteSchema);
+mongoose.model("Note", NoteSchema);
+module.exports = mongoose.model("Note");
