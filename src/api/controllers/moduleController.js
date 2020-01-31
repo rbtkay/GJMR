@@ -18,38 +18,25 @@ exports.get_modules = (req,res) => {
     })
 }
 
-
+// Creer un nouveau module
 exports.create_a_module = (req,res) => {
     let new_module = new Module(req.body);
-
-
-   
-        // const randomTextPromise = textApiProvider.getRandomText();
-        // randomTextPromise
-        // .then(result => {
-            // if(!new_post.content){
-            //     new_post.content = result;
-            // }
-        // })
-        // .then(result => {
-            try {
-                new_module.save((error, module) => {
-                    if (error){
-                        res.status(400);
-                        console.log(error);
-                        res.send({message : "Un module de ce nom existe déjà."});
-                    }
-                    else{
-                        res.status(201);
-                        res.json(module);
-                    }
-                });
+    try {
+        new_module.save((error, module) => {
+            if (error){
+                res.status(400);
+                console.log(error);
+                res.send({message : "Erreur : Un module de ce nom existe déjà"});
             }
-            catch (e){
-                res.status(500);
-                console.log(e);
-                res.json({message : 'Erreur serveur'});
+            else{
+                res.status(201);
+                res.json(module);
             }
-        // });
-    
+        });
+    }
+    catch (e){
+        res.status(500);
+        console.log(e);
+        res.json({message : 'Erreur serveur'});
+    }
 };
