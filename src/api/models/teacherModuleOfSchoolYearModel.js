@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let teacherSModuleOfSchoolYearSchema = new Schema({
+let teacherModuleOfSchoolYearSchema = new Schema({
     teacher_id: {
         type: String,
         required: true
@@ -17,4 +17,4 @@ let teacherSModuleOfSchoolYearSchema = new Schema({
 
 });
 
-module.exports = mongoose.model('teacherSModuleOfSchoolYear', teacherSModuleOfSchoolYearSchema);
+module.exports = mongoose.model('teacherModuleOfSchoolYear', teacherModuleOfSchoolYearSchema);

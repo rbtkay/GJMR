@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Module = require('../models/moduleModel');
 // const textApiProvider = require ('../providers/textApiProviders');
 
-
+// Récupère la liste des modules
 exports.get_modules = (req,res) => {
     Module.find({}, (error,modules) => {
         if(error){
@@ -17,3 +17,26 @@ exports.get_modules = (req,res) => {
         }
     })
 }
+
+// Creer un nouveau module
+exports.create_a_module = (req,res) => {
+    let new_module = new Module(req.body);
+    try {
+        new_module.save((error, module) => {
+            if (error){
+                res.status(400);
+                console.log(error);
+                res.send({message : "Erreur : Un module de ce nom existe déjà"});
+            }
+            else{
+                res.status(201);
+                res.json(module);
+            }
+        });
+    }
+    catch (e){
+        res.status(500);
+        console.log(e);
+        res.json({message : 'Erreur serveur'});
+    }
+};
