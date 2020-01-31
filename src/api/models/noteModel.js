@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 let NoteSchema = new Schema({
     value: {
-
         type: Number,
         required: true
     },
