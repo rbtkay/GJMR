@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Module = require('../models/moduleModel');
 // const textApiProvider = require ('../providers/textApiProviders');
 
-
+// Récupère la liste des modules
 exports.get_modules = (req,res) => {
     Module.find({}, (error,modules) => {
         if(error){

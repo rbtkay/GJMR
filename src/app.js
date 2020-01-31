@@ -18,7 +18,7 @@ server.get('/', (request, response) => {
 })
 
 
-
+// Routage du module
 const moduleRoute = require('./api/routes/moduleRoute');
 moduleRoute(server);
 
