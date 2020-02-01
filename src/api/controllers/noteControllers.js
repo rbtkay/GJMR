@@ -1,4 +1,3 @@
-// src/api/controllers/noteControllers.js
 const mongoose = require("mongoose");
 const Note = require("../models/noteModel");
 

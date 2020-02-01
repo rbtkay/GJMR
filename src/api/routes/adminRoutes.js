@@ -1,5 +1,5 @@
-const adminController = require('../controllers/adminController');
+const admin_controller = require('../controllers/adminControllers');
 
 module.exports = (app) => {
-  app.post('/admin/create_user', adminController.admin_create_user);
+  app.post('/admin/create_user', admin_controller.adminCreateUser);
 }

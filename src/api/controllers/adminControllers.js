@@ -3,7 +3,16 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 
-exports.admin_create_user = (req, res) => {
+/**
+ * Admin register a new user:
+ *  body : {
+ *      email (string)
+ *      last_name (string)
+ *      first_name (string)
+ *      role (string)
+ *  }
+ */
+exports.adminCreateUser = (req, res) => {
     let new_user = new User(req.body);
 
     const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
