@@ -41,3 +41,23 @@ exports.create_a_module = (req,res) => {
     }
 };
 
+
+
+exports.get_a_module = (req,res) => {
+    try{
+        Module.findById( req.params.module_id , (error, module) => {
+            if(error){
+                res.status(400);
+                res.json({message : 'Id introuvable'});
+            }
+            else{
+                res.status(201);
+                res.json(module);
+            }
+        })
+    }
+    catch (e){
+        res.status(500);
+        res.json({message : 'Erreur serveur'});
+    }
+};
