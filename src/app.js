@@ -24,7 +24,7 @@ adminRoutes(server);
 
 
 // Routage du module
-const moduleRoute = require('./api/routes/moduleRoute');
+const moduleRoute = require('./api/routes/moduleRoutes');
 moduleRoute(server);
 
 server.listen(port, hostname);

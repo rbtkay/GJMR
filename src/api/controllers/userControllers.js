@@ -3,12 +3,15 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-exports.user_login = (request, response) => {
+/**
+ * User login:
+ *  body : {
+ *      email (string)
+ *      password (string)
+ *  }
+ */
+exports.userLogin = (request, response) => {
     let { email, password } = request.body;
-
-    console.log('password')
-    console.log(password)
-
 
     User.findOne({ email }, (error, user) => {
         console.log("userPassword");

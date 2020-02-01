@@ -1,5 +1,5 @@
-const userController = require('../controllers/userController');
+const user_controller = require('../controllers/userControllers');
 
 module.exports = (app) => {
-  app.get('/users/login', userController.user_login);
+  app.get('/users/login', user_controller.userLogin);
 }
