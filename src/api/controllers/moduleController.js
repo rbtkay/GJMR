@@ -41,8 +41,6 @@ exports.create_a_module = (req,res) => {
     }
 };
 
-
-
 exports.get_a_module = (req,res) => {
     try{
         Module.findById( req.params.module_id , (error, module) => {
