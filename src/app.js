@@ -8,6 +8,8 @@ const userRoutes = require("./api/routes/userRoutes");
 const adminRoutes = require("./api/routes/adminRoutes");
 const studentRoute = require("./api/routes/studentRoutes");
 const moduleRoute = require("./api/routes/moduleRoutes");
+const schoolYearRoute = require("./api/routes/schoolYearRoutes");
+
 // constants
 const hostname = "0.0.0.0";
 const port = 3000;
@@ -20,6 +22,7 @@ server.use(bodyParser.json());
 // add route to server
 userRoutes(server);
 // adminRoutes(server);
+schoolYearRoute(server);
 studentRoute(server);
 moduleRoute(server);
 
