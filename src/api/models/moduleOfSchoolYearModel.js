@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-let SchoolYearOfStudentSchema = new Schema({
-    student_id: {
+let moduleOfSchoolYearModelSchema = new Schema({
+    module_id: {
         type: String,
         required: true
     },
@@ -13,6 +13,6 @@ let SchoolYearOfStudentSchema = new Schema({
 });
 
 module.exports = mongoose.model(
-    "SchoolYearOfStudent",
-    SchoolYearOfStudentSchema
+    "moduleOfSchoolYearModel",
+    moduleOfSchoolYearModelSchema
 );
