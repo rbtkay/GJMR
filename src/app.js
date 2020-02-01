@@ -19,7 +19,7 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 // add route to server
 userRoutes(server);
-adminRoutes(server);
+// adminRoutes(server);
 studentRoute(server);
 moduleRoute(server);
 
