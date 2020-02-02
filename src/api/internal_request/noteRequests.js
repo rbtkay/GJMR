@@ -4,6 +4,7 @@ const Note = require("../models/noteModel");
 const { serverError } = require("../functions/errorManagment");
 
 exports.getNotesFromModulesAndStudent = (modules_id, student_id, response) => {
+    // FIXME : to note controllers
     Note.find({
         module_id: { $in: modules_id },
         student_id

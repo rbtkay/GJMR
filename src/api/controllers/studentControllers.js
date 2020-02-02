@@ -18,7 +18,7 @@ const {
     serverError
 } = require("../functions/errorManagment");
 
-exports.getStudents = (request, response) => {
+exports.getStudents = (request, response) => { //FIXME: cette fonction est redundant, cest la meme que getAllUsers dans userControllers
     User.find()
         .then((student, error) =>
             requestManagment(
@@ -31,7 +31,7 @@ exports.getStudents = (request, response) => {
         .catch(error => serverError(error, response));
 };
 
-exports.getStudent = (request, response) => {
+exports.getStudent = (request, response) => { //FIXME: cette fonction est redundant, cest la meme que getUserById dans userControllers
     User.findById(request.params.student_id)
         .then((student, error) =>
             requestManagment(
@@ -44,7 +44,7 @@ exports.getStudent = (request, response) => {
         .catch(error => serverError(error, response));
 };
 
-exports.getStudentModules = (request, response) => {
+exports.getStudentModules = (request, response) => { //FIXME: cette fonction devrait etre dans le controller de module et sappele getModuleByStudent
     let send_response = {};
 
     SchoolYearOfStudent.findOne({
