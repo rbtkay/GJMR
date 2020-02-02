@@ -124,8 +124,12 @@ exports.deleteNote = (request, response) => {
         });
 };
 
-//Recuperer les notes en fonction de modules
-
+/**
+ * Recuperer les notes en fonction de modules
+ *  body : {
+ *      modules_id (int)
+ *  }
+ */
 exports.getNotesByModulesId = (request, response) => {
     Note.find({
         module_id: {
@@ -140,3 +144,30 @@ exports.getNotesByModulesId = (request, response) => {
         )
     ).catch(error => serverError(error, response));
 }
+
+/**
+ * Get a Notes from students for modules :
+ *  student_id (int)
+ *  body : {
+ *      modules_id (int)
+ *  }
+ */
+exports.getNotesFromModulesAndStudent = (request, response) => {
+    Note.find(
+        request.body
+            ? {
+                  module_id: { $in: modules_id },
+                  student_id: request.params.student_id
+              }
+            : { student_id: request.params.student_id }
+    )
+        .then((modules, error) => {
+            requestManagment(
+                response,
+                modules,
+                error,
+                "Aucun note n'a été trouvé."
+            );
+        })
+        .catch(error => serverError(error, response));
+};

@@ -8,5 +8,7 @@ module.exports = app => {
         .patch( /* jwtMiddleware.verify_token, */ note_controllers.updateNote)
         .delete( /* jwtMiddleware.verify_token, */ note_controllers.deleteNote);
     app.route("/notes/modules")
-        .get(note_controllers.getNotesByModulesId)
+    app.route("/notes/student/:student_id").get(
+        note_controllers.getNotesFromModulesAndStudent
+    );
 };
