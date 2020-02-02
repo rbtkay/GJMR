@@ -6,17 +6,26 @@ exports.serverError = (error, response) => {
     });
 };
 
-exports.requestManagment = (response, result, error, message, callback) => {
+exports.requestManagment = (response, result, error, message) => {
     if (error || !result) {
         response.status(400);
         console.log(error);
         response.json(message);
     } else {
         response.status(200);
-        if (callback) {
-            callback();
-        } else {
-            response.json(result);
-        }
+        response.json(result);
     }
 };
+
+exports.requestManagmentPromise = new Promise(
+    (response, result, error, message) => {
+        if (error || !result) {
+            response.status(400);
+            console.log(error);
+            response.json(message);
+            reject();
+        } else {
+            resolve();
+        }
+    }
+);

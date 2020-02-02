@@ -4,6 +4,7 @@ const ModuleOfSchoolYear = require("../models/moduleOfSchoolYearModel");
 // fucntions
 const {
     requestManagment,
+    requestManagmentPromise,
     serverError
 } = require("../functions/errorManagment");
 
@@ -30,13 +31,12 @@ exports.getModulesById = (modules_id, response) => {
 exports.getModulesIdFromSchoolYear = (school_year_id, response) => {
     ModuleOfSchoolYear.find({ school_year_id })
         .then((modules, error) =>
-            requestManagment(
+            requestManagmentPromise(
                 response,
                 modules,
                 error,
-                "Aucun module trouvé.",
-                () => JSON.parse(modules).map(module => module.module_id)
-            )
+                "Aucun module trouvé."
+            ).then(() => JSON.parse(modules).map(module => module.module_id))
         )
         .catch(error => serverError(error, response));
 };
