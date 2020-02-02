@@ -16,7 +16,6 @@ exports.userLogin = (request, response) => {
     let { email, password } = request.body;
 
     User.findOne({ email }).then((user) => {
-
         if (!user) {
             response.status(401);
             response.json({ message: 'Auth Failed' });
