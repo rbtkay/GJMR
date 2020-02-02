@@ -38,4 +38,75 @@ exports.createAModule = (req,res) => {
         console.log(e);
         res.json({message : 'Erreur serveur'});
     }
+
+}  
+
+// récupérer un module par son id
+exports.get_a_module = (req,res) => {
+    try{
+        Module.findById( req.params.module_id , (error, module) => {
+            if(error){
+                res.status(400);
+                res.json({message : 'Id introuvable'});
+            }
+            else{
+                res.status(200);
+                res.json(module);
+            }
+        })
+    }
+    catch (e){
+        res.status(500);
+        res.json({message : 'Erreur serveur'});
+    }
+}  
+
+
+// mettre à jour un module
+exports.update_a_module = (req,res) => {
+    try{
+        // {new:true} est un  objet qui permet d'envoyer directement la nouvelle version dans la response sinon il va garder l'ancienne version dans la response.
+        // Cependant il va bien faire la modification
+        
+        Module.findByIdAndUpdate( req.params.module_id , req.body, {new: true}, (error, module) => {
+            if(error){
+                res.status(400);
+                console.log(error);
+                res.json({message : 'ID introuvable'});
+            }
+            else{
+                res.status(200);
+                res.json(module);
+            }
+        })
+    }
+    catch(e){
+        res.status (500);
+        console.log(e);
+        res.json("Erreur du serveur");
+    }
+
+};
+
+// supprimer un module
+
+exports.delete_a_module = (req,res) => {
+    try{
+        Module.findByIdAndDelete( req.params.module_id , (error, module) => {
+            if(error){
+                res.status(400);
+                res.json({message : 'Id introuvable'});
+                console.log(error);
+            }
+            else{
+                res.status(201);
+                res.json('Module supprimé');
+            }
+        })
+    }
+    catch (e){
+        res.status(500);
+        res.json({message : 'Erreur serveur'});
+        console.log(e);
+    }
 };
