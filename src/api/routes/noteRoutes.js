@@ -7,4 +7,7 @@ module.exports = app => {
         .post(/* jwtMiddleware.verify_token, */ note_controllers.createNote)
         .patch(/* jwtMiddleware.verify_token, */ note_controllers.updateNote)
         .delete(/* jwtMiddleware.verify_token, */ note_controllers.deleteNote);
+    app.route("/notes/student/:student_id").get(
+        note_controllers.getNotesFromModulesAndStudent
+    );
 };

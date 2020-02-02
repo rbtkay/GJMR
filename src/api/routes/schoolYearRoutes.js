@@ -1,16 +1,19 @@
-const school_year_controller = require('../controllers/schoolYearControllers');
-const jwt = require('../middlewares/jwtMiddleware');
+const school_year_controller = require("../controllers/schoolYearControllers");
 
-module.exports = (app) => {
-    app.route('/schoolyear/')
+const jwt = require("../middlewares/jwtMiddleware");
+
+module.exports = app => {
+    app.route("/school_year/")
+        // set ids in body request to have a specific list of school year
+        .get(school_year_controller.getSchoolYears)
         .post(school_year_controller.createSchoolYear)
         .delete(school_year_controller.deleteSchoolYear)
-        .get(school_year_controller.getSchoolYears)
-        .put(school_year_controller.updateSchoolYear)
+        .put(school_year_controller.updateSchoolYear);
 
-    //   app.route(jwt.verify_administrator_token, '/admin/user')
-    //     .get(user_controller.getAllUsers)
-    //     .post(user_controller.createUser)
-    //     .put(user_controller.updateUser)
-    // .delete(user_controller.deleteUser)
-}
+    app.route("/school_year/:school_year_id").get(
+        school_year_controller.getSchoolYearById
+    );
+    app.route("/school_year/student/:student_id/modules").get(
+        getSchoolYearAndModulesByStudentId
+    );
+};
