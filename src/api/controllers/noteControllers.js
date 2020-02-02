@@ -11,7 +11,9 @@ exports.getNote = (request, response) => {
             if (error) {
                 response.status(400);
                 console.log(error);
-                response.json({ message: "Note introuvable" });
+                response.json({
+                    message: "Note introuvable"
+                });
             } else {
                 response.status(200);
                 response.json(note);
@@ -20,7 +22,9 @@ exports.getNote = (request, response) => {
         .catch(error => {
             response.status(500);
             console.log(error);
-            response.json({ message: "Erreur serveur" });
+            response.json({
+                message: "Erreur serveur"
+            });
         });
 };
 
@@ -41,7 +45,9 @@ exports.createNote = (request, response) => {
             if (error) {
                 response.status(400);
                 console.log(error);
-                response.json({ message: "Il manque des informations" });
+                response.json({
+                    message: "Il manque des informations"
+                });
             } else {
                 response.status(201);
                 response.json(note);
@@ -50,7 +56,9 @@ exports.createNote = (request, response) => {
         .catch(error => {
             response.status(500);
             console.log(error);
-            response.json({ message: "Erreur serveur" });
+            response.json({
+                message: "Erreur serveur"
+            });
         });
 };
 
@@ -63,12 +71,16 @@ exports.createNote = (request, response) => {
  *  }
  */
 exports.updateNote = (request, response) => {
-    Note.findByIdAndUpdate(request.params.note_id, request.body, { new: true })
+    Note.findByIdAndUpdate(request.params.note_id, request.body, {
+            new: true
+        })
         .then((error, note) => {
             if (error) {
                 response.status(400);
                 console.log(error);
-                response.json({ message: "Note introuvable" });
+                response.json({
+                    message: "Note introuvable"
+                });
             } else {
                 response.status(200);
                 response.json(note);
@@ -77,7 +89,9 @@ exports.updateNote = (request, response) => {
         .catch(error => {
             response.status(500);
             console.log(error);
-            response.json({ message: "Erreur serveur" });
+            response.json({
+                message: "Erreur serveur"
+            });
         });
 };
 
@@ -91,15 +105,38 @@ exports.deleteNote = (request, response) => {
             if (error) {
                 response.status(400);
                 console.log(error);
-                response.json({ message: "Note introuvable" });
+                response.json({
+                    message: "Note introuvable"
+                });
             } else {
                 response.status(200);
-                response.json({ message: "Note supprimée" });
+                response.json({
+                    message: "Note supprimée"
+                });
             }
         })
         .catch(error => {
             response.status(500);
             console.log(error);
-            response.json({ message: "Erreur serveur" });
+            response.json({
+                message: "Erreur serveur"
+            });
         });
 };
+
+//Recuperer les notes en fonction de modules
+
+exports.getNotesByModulesId = (request, response) => {
+    Note.find({
+        module_id: {
+            $in: request.body.modules_id
+        }
+    }).then((notes, error) =>
+        requestManagment(
+            response,
+            notes,
+            error,
+            "Aucune note n'a été trouvée."
+        )
+    ).catch(error => serverError(error, response));
+}

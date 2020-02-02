@@ -18,7 +18,7 @@ exports.getModule = (req, res) => {
     })
 }
 
-//recup 
+//Recuperer les modules d'un intervenant
 
 exports.getModulesByTeacher = (request, response) => {
     Module.find({}).then((modules, error) =>
@@ -31,6 +31,7 @@ exports.getModulesByTeacher = (request, response) => {
     ).catch(error => serverError(error, response));
 
 }
+
 
 
 // Creer un nouveau module
