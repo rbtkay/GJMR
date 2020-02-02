@@ -8,7 +8,6 @@ const {
 } = require("../functions/errorManagment");
 const { internalRequest } = require("../functions/internalRequest");
 
-// Récupère la liste des modules
 exports.getModules = (request, response) => {
     Module.find(
         request.body
@@ -48,7 +47,19 @@ exports.getModuleById = (request, response) => {
     }
 };
 
-// Creer un nouveau module
+//Recuperer les modules d'un intervenant
+exports.getModulesByTeacher = (request, response) => {
+    Module.find({}).then((modules, error) =>
+        requestManagment(
+            response,
+            results,
+            error,
+            "Aucun module n'a été trouvé."
+        )
+    ).catch(error => serverError(error, response));
+
+}
+
 exports.createModule = (request, response) => {
     let new_module = new Module(request.body);
     try {
@@ -76,7 +87,6 @@ exports.updateModule = (request, response) => {
     try {
         // {new:true} est un  objet qui permet d'envoyer directement la nouvelle version dans la response sinon il va garder l'ancienne version dans la response.
         // Cependant il va bien faire la modification
-
         Module.findByIdAndUpdate(
             request.params.module_id,
             request.body,
