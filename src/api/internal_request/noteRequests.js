@@ -3,7 +3,7 @@ const Note = require("../models/noteModel");
 // fucntions
 const { serverError } = require("../functions/errorManagment");
 
-exports.getNotesFromModulesAndStudent = (modules_id, student_id) => {
+exports.getNotesFromModulesAndStudent = (modules_id, student_id) => { //FIXME: 
     Note.find({
         module_id: { $in: modules_id },
         student_id

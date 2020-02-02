@@ -6,11 +6,11 @@ let schoolYearSchema = new Schema({
         type: String,
         required: true
     },
-    startDate: {
+    start_date: {
         type: Date,
         required: true
     },
-    endDate: {
+    end_date: {
         type: Date,
         required: true
     },

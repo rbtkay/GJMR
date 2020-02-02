@@ -7,7 +7,7 @@ const {
     serverError
 } = require("../functions/errorManagment");
 
-exports.getModuleById = (module_id, response) => {
+exports.getModuleById = (module_id, response) => { //FIXME: cette fonction devrait etre dans le moduleControllers
     Module.find({ module_id })
         .then((module, error) =>
             requestManagment(response, module, error, "Module introuvable.")
@@ -15,7 +15,7 @@ exports.getModuleById = (module_id, response) => {
         .catch(error => serverError(error, response));
 };
 
-exports.getModulesById = (modules_id, response) => {
+exports.getModulesById = (modules_id, response) => { //FIXME: cette fonction devrait etre dans le moduleControllers
     Module.find({
         module_id: {
             $in: modules_id
@@ -27,7 +27,7 @@ exports.getModulesById = (modules_id, response) => {
         .catch(error => serverError(error, response));
 };
 
-exports.getModulesIdFromSchoolYear = (school_year_id, response) => {
+exports.getModulesIdFromSchoolYear = (school_year_id, response) => { //FIXME: cette fonction devrait etre dans le moduleOfSchoolControllers
     ModuleOfSchoolYear.find({ school_year_id })
         .then((modules, error) =>
             requestManagment(

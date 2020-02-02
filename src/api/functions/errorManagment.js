@@ -9,7 +9,7 @@ exports.serverError = (error, response) => {
 exports.requestManagment = (response, result, error, message, callback) => {
     if (error || !result) {
         response.status(400);
-        console.log(error);
+        // console.log(error);
         response.json(message);
     } else {
         response.status(200);
