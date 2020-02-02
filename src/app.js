@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 // routes
 const userRoutes = require("./api/routes/userRoutes");
-const adminRoutes = require("./api/routes/adminRoutes");
+// const adminRoutes = require("./api/routes/adminRoutes");
 const studentRoute = require("./api/routes/studentRoutes");
 const moduleRoute = require("./api/routes/moduleRoutes");
 const schoolYearRoute = require("./api/routes/schoolYearRoutes");

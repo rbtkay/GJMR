@@ -16,15 +16,15 @@ const { serverError } = require('../functions/errorManagment')
         required: true
     },
 */
-exports.createSchoolYear = (req, res) => {
-    let new_school_year = new SchoolYear(req.body);
+exports.createSchoolYear = (request, response) => {
+    let new_school_year = new SchoolYear(request.body);
 
     new_school_year.save().then((school_year, error) => {
-        res.status(200);
-        res.json(school_year);
+        response.status(200);
+        response.json(school_year);
     }).catch(error => {
-        res.status(500)
-        res.json({ message: "Erreur serveur." })
+        response.status(500)
+        response.json({ message: "Erreur serveur." })
     });
 }
 
@@ -34,34 +34,34 @@ exports.createSchoolYear = (req, res) => {
  *      school_year_id (string)
  *  }
  */
-exports.deleteSchoolYear = (req, res) => {
-    SchoolYear.findByIdAndDelete((req.body.schoolyear_id)).then((result, error) => {
-        res.status(200);
-        res.json({ message: "schoolyear deleted properly" })
-    }).catch(error => { serverError(error, res) });
+exports.deleteSchoolYear = (request, response) => {
+    SchoolYear.findByIdAndDelete((request.body.schoolyear_id)).then((result, error) => {
+        response.status(200);
+        response.json({ message: "schoolyear deleted properly" })
+    }).catch(error => { serverError(error, response) });
 }
 
 /**
  * gets all schoolyears:
  */
-exports.getSchoolYears = (req, res) => {
+exports.getSchoolYears = (request, response) => {
     SchoolYear.find({}).then((school_years, error) => {
-        res.status(200)
-        res.json(school_years)
+        response.status(200)
+        response.json(school_years)
     }).catch(e => {
-        serverError(error, res)
+        serverError(error, response)
     })
 }
 
 //update a specific school year
-exports.updateSchoolYear = (req, res) => {
-    const { schoolyear_id, name, start_date, end_date } = req.body;
+exports.updateSchoolYear = (request, response) => {
+    const { schoolyear_id, name, start_date, end_date } = request.body;
 
     SchoolYear.findByIdAndUpdate(schoolyear_id, { $set: { name, start_date, end_date } })
         .then((result, error) => {
-            res.status(200)
-            res.json({ message: "schoolyear updated correctly" })
+            response.status(200)
+            response.json({ message: "schoolyear updated correctly" })
         }).catch(error => {
-            serverError(e, res);
+            serverError(e, response);
         })
 }
