@@ -1,9 +1,11 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const { requestManagment, serverError } = require("../functions/errorManagment");
-
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const {
+    requestManagment,
+    serverError
+} = require("../functions/errorManagment");
 
 /**
  * User login:
@@ -20,30 +22,55 @@ exports.userLogin = (request, response) => {
             response.status(401);
             response.json({ message: 'Auth Failed' });
         }
+            const isPasswordCorrect = bcrypt.compareSync(
+                password,
+                user.password
+            );
+            if (!isPasswordCorrect) {
+                response.status(401);
+                response.json({ message: "Auth Failed" });
+            } else {
+                jwt.sign(
+                    { email: user.email, role: user.role },
+                    process.env.JWT_KEY,
+                    { expiresIn: "10m" },
+                    (jwtError, token) => {
+                        if (jwtError) {
+                            response.status(500);
+                            response.json({ message: "Erreur serveur" });
+                        } else {
+                            response.status(200);
+                            response.json({ token });
+                        }
+                    }
+                );
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            response.status(500);
+            response.json({ message: "Erreur serveur" });
+        });
+};
 
-        const isPasswordCorrect = bcrypt.compareSync(password, user.password)
-        if (!isPasswordCorrect) {
-            response.status(401);
-            response.json({ message: 'Auth Failed' });
+exports.getUsers = (request, response) => {
+    User.find(
+        request.body
+            ? {
+                  user_id: {
+                      $in: request.body.user_id
+                  }
+              }
+            : null
+    ).then((users, error) => {
+        if (!!error) {
+            serverError(error, response);
         } else {
-            jwt.sign({ email: user.email, role: user.role }, process.env.JWT_KEY, { expiresIn: "10m" }, (jwtError, token) => {
-                if (jwtError) {
-                    response.status(500);
-                    response.json({ message: "Erreur serveur" });
-                }
-                else {
-                    response.status(200);
-                    response.json({ token });
-                }
-            })
+            response.status(200);
+            response.json(users);
         }
-    }).catch(error => {
-        console.log(error);
-        response.status(500);
-        response.json({ message: "Erreur serveur" });
-    })
-}
-
+    });
+};
 
 /**
  * Admin register a new user:
@@ -65,20 +92,18 @@ exports.createUser = (request, response) => {
             if (error) {
                 response.status(400);
                 response.json({ message: error });
-            }
-            else {
+            } else {
                 response.status(201);
                 user = user.toObject();
-                delete user.password
-                response.json(user)
+                delete user.password;
+                response.json(user);
             }
-        })
-    }
-    catch (e) {
+        });
+    } catch (e) {
         response.status(500);
         response.json({ message: "Erreur serveur." });
     }
-}
+};
 
 /**
  * Admin update a user:
@@ -90,14 +115,17 @@ exports.updateUser = (request, response) => {
     const { email, last_name, first_name, role } = new User(request.body);
     const user_id = mongoose.Types.ObjectId(request.body);
 
-    User.findByIdAndUpdate((user_id), { $set: { email, last_name, first_name, role } }) //FIXME: si le document n'exist pas la request time out
-        .then((result) => {
+    User.findByIdAndUpdate(user_id, {
+        $set: { email, last_name, first_name, role }
+    }) //FIXME: si le document n'exist pas la request time out
+        .then(result => {
             response.status(200);
-            response.json(result)
-        }).catch(error => {
+            response.json(result);
+        })
+        .catch(error => {
             response.json({ message: error });
         });
-}
+};
 
 /**
  * Admin delete a user:
@@ -107,11 +135,13 @@ exports.updateUser = (request, response) => {
  */
 exports.deleteUser = (request, response) => {
     console.log(request.body.user_id);
-    User.findByIdAndDelete((request.body.user_id), (error, result) => {
+    User.findByIdAndDelete(request.body.user_id, (error, result) => {
         response.status(200);
-        response.json({ message: "user deleted properly" })
-    }).catch(error => { serverError(error, response) });
-}
+        response.json({ message: "user deleted properly" });
+    }).catch(error => {
+        serverError(error, response);
+    });
+};
 
 /**
  * Admin gets all user depending on the queryString:
@@ -120,39 +150,36 @@ exports.deleteUser = (request, response) => {
  *  }
  */
 exports.getUsersByRole = (request, response) => {
-    console.log(request.params.user_role);
     User.find({ role: request.params.user_role }).then((users, error) => {
         if (!!error) {
-            serverError(error, response)
+            serverError(error, response);
         } else {
-            response.status(200)
-            response.json(users)
+            response.status(200);
+            response.json(users);
         }
-    })
-}
+    });
+};
 
-exports.getAllUsers = (request, response) => {
-    User.find({}).then((users, error) => {
-        if (!!error) {
-            serverError(error, response)
-        } else {
-            response.status(200)
-            response.json(users)
-        }
-    })
-}
-
-exports.getUsersById = (request, response) => {
+exports.getUserById = (request, response) => {
     User.findById(request.body.user_id).then((users, error) => {
         if (!!error) {
-            serverError(error, response)
+            serverError(error, response);
         } else {
-            response.status(200)
-            response.json(users)
+            response.status(200);
+            response.json(users);
         }
-    })
-}
+    });
+};
 
-
-
-
+exports.getTeachersByModules = (request, response) => {
+    User.find(request.body.user_id)
+        .then((results, error) =>
+            requestManagment(
+                response,
+                results,
+                error,
+                "Aucun professeur n'a été trouvé."
+            )
+        )
+        .catch(error => serverError(error, response));
+};

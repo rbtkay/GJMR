@@ -1,112 +1,149 @@
-const mongoose = require('mongoose');
-const Module = require('../models/moduleModel');
-// const textApiProvider = require ('../providers/textApiProviders');
+const mongoose = require("mongoose");
+const Module = require("../models/moduleModel");
+const ModuleOfSchoolYear = require("../models/moduleOfSchoolYearModel");
+// fucntions
+const {
+    requestManagment,
+    serverError
+} = require("../functions/errorManagment");
+const { internalRequest } = require("../functions/internalRequest");
 
-// Récupère la liste des modules
-exports.getModule = (req,res) => {
-    Module.find({}, (error,modules) => {
-        if(error){
-            res.status(500);
-            res.json({message: "Erreur serveur."});
-        }
-        else{
-            res.status(200);
-            res.json(modules);
-        
-        }
-    })
-}
-
-// Creer un nouveau module
-exports.createAModule = (req,res) => {
-    let new_module = new Module(req.body);
-    try {
-        new_module.save((error, module) => {
-            if (error){
-                res.status(400);
-                console.log(error);
-                res.send({message : "Erreur : Un module de ce nom existe déjà"});
-            }
-            else{
-                res.status(201);
-                res.json(module);
-            }
-        });
-    }
-    catch (e){
-        res.status(500);
-        console.log(e);
-        res.json({message : 'Erreur serveur'});
-    }
-
-}  
+exports.getModules = (request, response) => {
+    Module.find(
+        request.body
+            ? {
+                  module_id: {
+                      $in: request.body.module_id
+                  }
+              }
+            : null
+    )
+        .then((modules, error) => {
+            requestManagment(
+                response,
+                modules,
+                error,
+                "Aucun module n'a été trouvé."
+            );
+        })
+        .catch(error => serverError(error, response));
+};
 
 // récupérer un module par son id
-exports.get_a_module = (req,res) => {
-    try{
-        Module.findById( req.params.module_id , (error, module) => {
-            if(error){
-                res.status(400);
-                res.json({message : 'Id introuvable'});
+exports.getModuleById = (request, response) => {
+    try {
+        Module.findById(request.params.module_id, (error, module) => {
+            if (error) {
+                response.status(400);
+                response.json({ message: "Id introuvable" });
+            } else {
+                response.status(200);
+                response.json(module);
             }
-            else{
-                res.status(200);
-                res.json(module);
-            }
-        })
+        });
+    } catch (e) {
+        response.status(500);
+        response.json({ message: "Erreur serveur" });
     }
-    catch (e){
-        res.status(500);
-        res.json({message : 'Erreur serveur'});
-    }
-}  
+};
 
+//Recuperer les modules d'un intervenant
+exports.getModulesByTeacher = (request, response) => {
+    Module.find({}).then((modules, error) =>
+        requestManagment(
+            response,
+            results,
+            error,
+            "Aucun module n'a été trouvé."
+        )
+    ).catch(error => serverError(error, response));
+
+}
+
+exports.createModule = (request, response) => {
+    let new_module = new Module(request.body);
+    try {
+        new_module.save((error, module) => {
+            if (error) {
+                response.status(400);
+                console.log(error);
+                response.send({
+                    message: "Erreur : Un module de ce nom existe déjà"
+                });
+            } else {
+                response.status(201);
+                response.json(module);
+            }
+        });
+    } catch (e) {
+        response.status(500);
+        console.log(e);
+        response.json({ message: "Erreur serveur" });
+    }
+};
 
 // mettre à jour un module
-exports.update_a_module = (req,res) => {
-    try{
+exports.updateModule = (request, response) => {
+    try {
         // {new:true} est un  objet qui permet d'envoyer directement la nouvelle version dans la response sinon il va garder l'ancienne version dans la response.
         // Cependant il va bien faire la modification
-        
-        Module.findByIdAndUpdate( req.params.module_id , req.body, {new: true}, (error, module) => {
-            if(error){
-                res.status(400);
-                console.log(error);
-                res.json({message : 'ID introuvable'});
+        Module.findByIdAndUpdate(
+            request.params.module_id,
+            request.body,
+            { new: true },
+            (error, module) => {
+                if (error) {
+                    response.status(400);
+                    console.log(error);
+                    response.json({ message: "ID introuvable" });
+                } else {
+                    response.status(200);
+                    response.json(module);
+                }
             }
-            else{
-                res.status(200);
-                res.json(module);
-            }
-        })
-    }
-    catch(e){
-        res.status (500);
+        );
+    } catch (e) {
+        response.status(500);
         console.log(e);
-        res.json("Erreur du serveur");
+        response.json("Erreur du serveur");
     }
-
 };
 
 // supprimer un module
-
-exports.delete_a_module = (req,res) => {
-    try{
-        Module.findByIdAndDelete( req.params.module_id , (error, module) => {
-            if(error){
-                res.status(400);
-                res.json({message : 'Id introuvable'});
+exports.deleteModule = (request, response) => {
+    try {
+        Module.findByIdAndDelete(request.params.module_id, (error, module) => {
+            if (error) {
+                response.status(400);
+                response.json({ message: "Id introuvable" });
                 console.log(error);
+            } else {
+                response.status(201);
+                response.json("Module supprimé");
             }
-            else{
-                res.status(201);
-                res.json('Module supprimé');
-            }
-        })
-    }
-    catch (e){
-        res.status(500);
-        res.json({message : 'Erreur serveur'});
+        });
+    } catch (e) {
+        response.status(500);
+        response.json({ message: "Erreur serveur" });
         console.log(e);
     }
+};
+
+/**
+ * params : school_year_id
+ * return array
+ */
+exports.getModulesIdBySchoolYearId = (request, response) => {
+    ModuleOfSchoolYear.find({
+        school_year_id: request.params.school_year_id
+    })
+        .then((results, error) =>
+            requestManagment(
+                response,
+                results,
+                error,
+                "Aucun module n'a été trouvé."
+            )
+        )
+        .catch(error => serverError(error, response));
 };
