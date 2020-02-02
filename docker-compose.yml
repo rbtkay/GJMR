@@ -21,16 +21,8 @@ services:
   mongo:
     container_name: container_mongo
     image: mongo
-    # working_dir: /database
-    # command:
-    #   - /bin/sh
-    #   - '-c'
-    #   - 'bash database.sh db_feedback_ipssi'
-      # - 'db.collections.users.save({"password": "password", "email": "admin@admin.com", "last_name": "adminlastname", "first_name": "adminfirstname", "role": "admin"})'
     ports:
       - "27017:27017"
-    # volumes:
-    #   - './database:/database'
     networks:
       - my-network
 networks:
