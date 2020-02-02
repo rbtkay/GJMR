@@ -103,3 +103,30 @@ exports.deleteNote = (request, response) => {
             response.json({ message: "Erreur serveur" });
         });
 };
+
+/**
+ * Get a Notes from students for modules :
+ *  student_id (int)
+ *  body : {
+ *      modules_id (int)
+ *  }
+ */
+exports.getNotesFromModulesAndStudent = (request, response) => {
+    Note.find(
+        request.body
+            ? {
+                  module_id: { $in: modules_id },
+                  student_id: request.params.student_id
+              }
+            : { student_id: request.params.student_id }
+    )
+        .then((modules, error) => {
+            requestManagment(
+                response,
+                modules,
+                error,
+                "Aucun note n'a été trouvé."
+            );
+        })
+        .catch(error => serverError(error, response));
+};

@@ -1,6 +1,21 @@
-const SchoolYear = require('../models/schoolYearModel');
-const mongoose = require('mongoose');
-const { serverError } = require('../functions/errorManagment')
+// modules
+const mongoose = require("mongoose");
+// schema
+const SchoolYear = require("../models/schoolYearModel");
+const SchoolYearOfStudent = require("../models/schoolYearOfStudentModel");
+// functions
+const {
+    getModulesById,
+    getModulesIdFromSchoolYear
+} = require("../internal_request/moduleRequests");
+const { getTeachersById } = require("../internal_request/teacherRequests");
+const {
+    getNotesFromModulesAndStudent
+} = require("../internal_request/noteRequests");
+const {
+    requestManagment,
+    serverError
+} = require("../functions/errorManagment");
 
 /*Create a new SchoolYear
     name: {
@@ -19,14 +34,17 @@ const { serverError } = require('../functions/errorManagment')
 exports.createSchoolYear = (request, response) => {
     let new_school_year = new SchoolYear(request.body);
 
-    new_school_year.save().then((school_year, error) => {
-        response.status(200);
-        response.json(school_year);
-    }).catch(error => {
-        response.status(500)
-        response.json({ message: "Erreur serveur." })
-    });
-}
+    new_school_year
+        .save()
+        .then((school_year, error) => {
+            response.status(200);
+            response.json(school_year);
+        })
+        .catch(error => {
+            response.status(500);
+            response.json({ message: "Erreur serveur." });
+        });
+};
 
 /**
  * Delete a schoolYear:
@@ -35,33 +53,57 @@ exports.createSchoolYear = (request, response) => {
  *  }
  */
 exports.deleteSchoolYear = (request, response) => {
-    SchoolYear.findByIdAndDelete((request.body.schoolyear_id)).then((result, error) => {
-        response.status(200);
-        response.json({ message: "schoolyear deleted properly" })
-    }).catch(error => { serverError(error, response) });
-}
+    SchoolYear.findByIdAndDelete(request.body.schoolyear_id)
+        .then((result, error) => {
+            response.status(200);
+            response.json({ message: "schoolyear deleted properly" });
+        })
+        .catch(error => {
+            serverError(error, response);
+        });
+};
 
 /**
  * gets all schoolyears:
  */
 exports.getSchoolYears = (request, response) => {
-    SchoolYear.find({}).then((school_years, error) => {
-        response.status(200)
-        response.json(school_years)
-    }).catch(e => {
-        serverError(error, response)
-    })
-}
+    SchoolYear.find()
+        .then((school_years, error) => {
+            response.status(200);
+            response.json(school_years);
+        })
+        .catch(e => {
+            serverError(error, response);
+        });
+};
 
 //update a specific school year
 exports.updateSchoolYear = (request, response) => {
     const { schoolyear_id, name, start_date, end_date } = request.body;
 
-    SchoolYear.findByIdAndUpdate(schoolyear_id, { $set: { name, start_date, end_date } })
+    SchoolYear.findByIdAndUpdate(schoolyear_id, {
+        $set: { name, start_date, end_date }
+    })
         .then((result, error) => {
-            response.status(200)
-            response.json({ message: "schoolyear updated correctly" })
-        }).catch(error => {
-            serverError(e, response);
+            response.status(200);
+            response.json({ message: "schoolyear updated correctly" });
         })
-}
+        .catch(error => {
+            serverError(e, response);
+        });
+};
+
+exports.getSchoolYearIdByStudentId = (request, response) => {
+    SchoolYearOfStudent.findOne({
+        student_id: request.params.student_id
+    })
+        .then((result, error) =>
+            requestManagment(
+                response,
+                result,
+                error,
+                "Utilisateur introuvable."
+            )
+        )
+        .catch(error => serverError(error, response));
+};
