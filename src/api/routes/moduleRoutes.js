@@ -1,21 +1,21 @@
-
 const module_controller = require("../controllers/moduleControllers");
 // const jwtMiddleware = require('../middleware/jwtMiddleware');
 
 module.exports = app => {
     app.route("/modules")
-        .get(module_controller.getModule)
-        .post(module_controller.createAModule);
+        .get(module_controller.getModules)
+        .post(module_controller.createModule);
 
     app.route("/modules/:module_id")
-        .get(module_controller.get_a_module)
-        .put(module_controller.update_a_module)
-        .delete(module_controller.delete_a_module);
-  
-    app.route('/modules/teachers/:teacher_id')
-        .get(module_controller.getModulesByTeacher);
-  
+        .get(module_controller.getModuleById)
+        .put(module_controller.updateModule)
+        .delete(module_controller.deleteModule);
+
+    app.route("/modules/teachers/:teacher_id").get(
+        module_controller.getModulesByTeacher
+    );
+
     app.route("/modules/school_year/:school_year_id").get(
-        module_controller.getModulesIdBySchoolYear
+        module_controller.getModulesIdBySchoolYearId
     );
 };

@@ -5,14 +5,6 @@ const SchoolYear = require("../models/schoolYearModel");
 const SchoolYearOfStudent = require("../models/schoolYearOfStudentModel");
 // functions
 const {
-    getModulesById,
-    getModulesIdFromSchoolYear
-} = require("../internal_request/moduleRequests");
-const { getTeachersById } = require("../internal_request/teacherRequests");
-const {
-    getNotesFromModulesAndStudent
-} = require("../internal_request/noteRequests");
-const {
     requestManagment,
     serverError
 } = require("../functions/errorManagment");
@@ -53,10 +45,10 @@ exports.createSchoolYear = (request, response) => {
  *  }
  */
 exports.deleteSchoolYear = (request, response) => {
-    SchoolYear.findByIdAndDelete(request.body.schoolyear_id)
+    SchoolYear.findByIdAndDelete(request.body.school_year_id)
         .then((result, error) => {
             response.status(200);
-            response.json({ message: "schoolyear deleted properly" });
+            response.json({ message: "school_year deleted properly" });
         })
         .catch(error => {
             serverError(error, response);
@@ -64,7 +56,7 @@ exports.deleteSchoolYear = (request, response) => {
 };
 
 /**
- * gets all schoolyears:
+ * gets all school_years:
  */
 exports.getSchoolYears = (request, response) => {
     SchoolYear.find()
@@ -79,18 +71,26 @@ exports.getSchoolYears = (request, response) => {
 
 //update a specific school year
 exports.updateSchoolYear = (request, response) => {
-    const { schoolyear_id, name, start_date, end_date } = request.body;
+    const { school_year_id, name, start_date, end_date } = request.body;
 
-    SchoolYear.findByIdAndUpdate(schoolyear_id, {
+    SchoolYear.findByIdAndUpdate(school_year_id, {
         $set: { name, start_date, end_date }
     })
         .then((result, error) => {
             response.status(200);
-            response.json({ message: "schoolyear updated correctly" });
+            response.json({ message: "school_year updated correctly" });
         })
         .catch(error => {
             serverError(e, response);
         });
+};
+
+exports.getSchoolYearById = (request, response) => {
+    SchoolYear.findById(equest.params.school_year_id)
+        .then((result, error) =>
+            requestManagment(response, result, error, "Promotion introuvable.")
+        )
+        .catch(error => serverError(error, response));
 };
 
 exports.getSchoolYearIdByStudentId = (request, response) => {
@@ -98,12 +98,7 @@ exports.getSchoolYearIdByStudentId = (request, response) => {
         student_id: request.params.student_id
     })
         .then((result, error) =>
-            requestManagment(
-                response,
-                result,
-                error,
-                "Utilisateur introuvable."
-            )
+            requestManagment(response, result, error, "Etudiant introuvable.")
         )
         .catch(error => serverError(error, response));
 };

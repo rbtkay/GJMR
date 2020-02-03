@@ -6,7 +6,6 @@ const {
     requestManagment,
     serverError
 } = require("../functions/errorManagment");
-const { internalRequest } = require("../functions/internalRequest");
 
 exports.getModules = (request, response) => {
     Module.find(
@@ -16,7 +15,7 @@ exports.getModules = (request, response) => {
                       $in: request.body.module_id
                   }
               }
-            : null
+            : {}
     )
         .then((modules, error) => {
             requestManagment(
@@ -49,16 +48,17 @@ exports.getModuleById = (request, response) => {
 
 //Recuperer les modules d'un intervenant
 exports.getModulesByTeacher = (request, response) => {
-    Module.find({}).then((modules, error) =>
-        requestManagment(
-            response,
-            results,
-            error,
-            "Aucun module n'a été trouvé."
+    Module.find({})
+        .then((modules, error) =>
+            requestManagment(
+                response,
+                results,
+                error,
+                "Aucun module n'a été trouvé."
+            )
         )
-    ).catch(error => serverError(error, response));
-
-}
+        .catch(error => serverError(error, response));
+};
 
 exports.createModule = (request, response) => {
     let new_module = new Module(request.body);
