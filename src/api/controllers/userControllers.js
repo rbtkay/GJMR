@@ -172,7 +172,11 @@ exports.getUserById = (request, response) => {
 };
 
 exports.getTeachersByModules = (request, response) => {
-    User.find(request.body.user_id)
+    User.find({
+        module_id: {
+            $in: request.body.modules_id
+        }
+    })
         .then((results, error) =>
             requestManagment(
                 response,
