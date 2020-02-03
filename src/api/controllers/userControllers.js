@@ -17,13 +17,11 @@ const {
 exports.userLogin = (request, response) => {
     let { email, password } = request.body;
 
-    User.findOne({ email })
-        .then(user => {
-            if (!user) {
-                response.status(401);
-                response.json({ message: "Auth Failed" });
-            }
-
+    User.findOne({ email }).then((user) => {
+        if (!user) {
+            response.status(401);
+            response.json({ message: 'Auth Failed' });
+        }
             const isPasswordCorrect = bcrypt.compareSync(
                 password,
                 user.password
