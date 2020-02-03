@@ -14,6 +14,6 @@ module.exports = app => {
         school_year_controller.getSchoolYearById
     );
     app.route("/school_year/student/:student_id").get(
-        getSchoolYearIdByStudentId
+        school_year_controller.getSchoolYearIdByStudentId
     );
 };

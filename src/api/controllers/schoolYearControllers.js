@@ -5,14 +5,6 @@ const SchoolYear = require("../models/schoolYearModel");
 const SchoolYearOfStudent = require("../models/schoolYearOfStudentModel");
 // functions
 const {
-    getModulesById,
-    getModulesIdFromSchoolYear
-} = require("../internal_request/moduleRequests");
-const { getTeachersById } = require("../internal_request/teacherRequests");
-const {
-    getNotesFromModulesAndStudent
-} = require("../internal_request/noteRequests");
-const {
     requestManagment,
     serverError
 } = require("../functions/errorManagment");

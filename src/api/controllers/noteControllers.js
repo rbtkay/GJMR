@@ -72,8 +72,8 @@ exports.createNote = (request, response) => {
  */
 exports.updateNote = (request, response) => {
     Note.findByIdAndUpdate(request.params.note_id, request.body, {
-            new: true
-        })
+        new: true
+    })
         .then((error, note) => {
             if (error) {
                 response.status(400);
@@ -135,15 +135,17 @@ exports.getNotesByModulesId = (request, response) => {
         module_id: {
             $in: request.body.modules_id
         }
-    }).then((notes, error) =>
-        requestManagment(
-            response,
-            notes,
-            error,
-            "Aucune note n'a été trouvée."
+    })
+        .then((notes, error) =>
+            requestManagment(
+                response,
+                notes,
+                error,
+                "Aucune note n'a été trouvée."
+            )
         )
-    ).catch(error => serverError(error, response));
-}
+        .catch(error => serverError(error, response));
+};
 
 /**
  * Get a Notes from students for modules :
@@ -154,9 +156,9 @@ exports.getNotesByModulesId = (request, response) => {
  */
 exports.getNotesFromModulesAndStudent = (request, response) => {
     Note.find(
-        request.body
+        request.body.modules_id
             ? {
-                  module_id: { $in: modules_id },
+                  module_id: { $in: request.body.modules_id },
                   student_id: request.params.student_id
               }
             : { student_id: request.params.student_id }

@@ -17,11 +17,12 @@ const {
 exports.userLogin = (request, response) => {
     let { email, password } = request.body;
 
-    User.findOne({ email }).then((user) => {
-        if (!user) {
-            response.status(401);
-            response.json({ message: 'Auth Failed' });
-        }
+    User.findOne({ email })
+        .then(user => {
+            if (!user) {
+                response.status(401);
+                response.json({ message: "Auth Failed" });
+            }
             const isPasswordCorrect = bcrypt.compareSync(
                 password,
                 user.password
@@ -55,13 +56,13 @@ exports.userLogin = (request, response) => {
 
 exports.getUsers = (request, response) => {
     User.find(
-        request.body
+        request.body.user_id
             ? {
                   user_id: {
                       $in: request.body.user_id
                   }
               }
-            : null
+            : {}
     ).then((users, error) => {
         if (!!error) {
             serverError(error, response);
@@ -134,7 +135,6 @@ exports.updateUser = (request, response) => {
  *  }
  */
 exports.deleteUser = (request, response) => {
-    console.log(request.body.user_id);
     User.findByIdAndDelete(request.body.user_id, (error, result) => {
         response.status(200);
         response.json({ message: "user deleted properly" });
