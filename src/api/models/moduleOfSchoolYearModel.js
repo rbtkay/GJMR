@@ -16,3 +16,4 @@ module.exports = mongoose.model(
     "moduleOfSchoolYearModel",
     moduleOfSchoolYearModelSchema
 );
+
