@@ -13,7 +13,7 @@ let schoolYearSchema = new Schema({
     end_date: {
         type: Date,
         required: true
-    },
+    }
 });
 
 module.exports = mongoose.model('SchoolYear', schoolYearSchema);

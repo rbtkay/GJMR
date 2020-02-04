@@ -13,7 +13,7 @@ let moduleOfSchoolYearModelSchema = new Schema({
 });
 
 module.exports = mongoose.model(
-    "moduleOfSchoolYearModel",
+    "ModuleOfSchoolYear",
     moduleOfSchoolYearModelSchema
 );
 
