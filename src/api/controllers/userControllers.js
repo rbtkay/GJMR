@@ -23,10 +23,10 @@ exports.userLogin = (request, response) => {
                 response.status(401);
                 response.json({ message: "Auth Failed" });
             }
-            const isPasswordCorrect = bcrypt.compareSync(
-                password,
-                user.password
-            );
+
+            const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+
+            console.log(isPasswordCorrect);
             if (!isPasswordCorrect) {
                 response.status(401);
                 response.json({ message: "Auth Failed" });
@@ -55,13 +55,14 @@ exports.userLogin = (request, response) => {
 };
 
 exports.getUsers = (request, response) => {
+    console.log(request.body.user_id)
     User.find(
         request.body.user_id
             ? {
-                  user_id: {
-                      $in: request.body.user_id
-                  }
-              }
+                '_id': {
+                    $in: request.body.user_id
+                }
+            }
             : {}
     ).then((users, error) => {
         if (!!error) {
