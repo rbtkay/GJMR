@@ -58,10 +58,10 @@ exports.getUsers = (request, response) => {
     User.find(
         request.body.user_id
             ? {
-                  user_id: {
-                      $in: request.body.user_id
-                  }
-              }
+                user_id: {
+                    $in: request.body.user_id
+                }
+            }
             : {}
     ).then((users, error) => {
         if (!!error) {

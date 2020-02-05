@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const json_document = require('./database.json')
 const bcrypt = require('bcrypt');
@@ -32,11 +31,6 @@ try {
                 schoolyear = result["ops"].filter(schoolyear => {
                     return schoolyear.name == "ESIS-aw"
                 })
-                // console.log("student._id.toString()")
-                // console.log(student._id.toString())
-
-                // console.log("schoolyear[0]['id'].toString()")
-                // console.log(schoolyear[0]["_id"].toString())
                 students_in_year = students.map(student => {
                     let student_in_year = {
                         "student_id": student._id.toString(),
@@ -45,14 +39,7 @@ try {
                     return student_in_year;
                 })
 
-                console.log(typeof students_in_year);
-                console.log(students_in_year);
-
-
                 SchoolYearOfStudentSchema.collection.insertMany(students_in_year).then(result => {
-                    //     console.log("schoolyear of students are inserted");
-                    //     console.log("schoolyear of students are inserted");
-
 
                     ModuleSchema.collection.insertMany(json_document["modules"]).then(result => {
                         console.log("initial modules inserted")

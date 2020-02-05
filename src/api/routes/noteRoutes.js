@@ -1,4 +1,3 @@
-// src/api/routes/noteRoutes.js
 const note_controllers = require("../controllers/noteControllers");
 
 module.exports = app => {
