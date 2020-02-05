@@ -11,7 +11,7 @@ exports.getModules = (request, response) => {
     Module.find(
         request.body
             ? {
-                  module_id: {
+                  '_id': {
                       $in: request.body.module_id
                   }
               }

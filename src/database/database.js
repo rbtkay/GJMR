@@ -17,6 +17,7 @@ try {
         var modules_in_year;
 
         const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
+        console.log(salt);
         const user_correct_password = json_document["users"].map(user => {
             user["password"] = bcrypt.hashSync("password", salt);
             return user;

@@ -9,6 +9,7 @@ const moduleRoute = require("./api/routes/moduleRoutes");
 const schoolYearRoute = require("./api/routes/schoolYearRoutes");
 const noteRoute = require("./api/routes/noteRoutes");
 const moduleInSchoolYearRoute = require('./api/routes/modulesInSchoolYearRoutes');
+const studentInYear = require('./api/routes/studentsInSchoolYearRoutes')
 
 // constants
 const hostname = "0.0.0.0";
@@ -25,6 +26,7 @@ schoolYearRoute(server);
 moduleRoute(server);
 noteRoute(server);
 moduleInSchoolYearRoute(server);
+studentInYear(server);
 
 // TODO remove : test if server works
 // server.get("/", (request, response) => {

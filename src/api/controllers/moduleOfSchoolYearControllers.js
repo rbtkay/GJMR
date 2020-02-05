@@ -27,13 +27,12 @@ exports.removeModuleFromSchoolYear = (request, response) => {
 exports.getAllModulesInYear = (request, response) => {
     ModuleOfSchoolYearSchema.find({ school_year_id: request.body.school_year_id }).then((result) => {
 
-        console.log(result);
         var resultIds = result.map(module_in_year => {
-            module_in_year.module_id
+            return mongoose.Types.ObjectId(module_in_year.module_id)
         })
-
+        console.log(resultIds);
         ModuleSchema.find({
-            module_id: {
+            '_id': {
                 $in: resultIds
             }
         }).then(modules => {
