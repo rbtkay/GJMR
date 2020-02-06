@@ -16,39 +16,44 @@ const {
  */
 exports.userLogin = (request, response) => {
     let { email, password } = request.body;
-
     User.findOne({ email })
         .then(user => {
             if (!user) {
                 response.status(401);
                 response.json({ message: "Auth Failed" });
-            }
-
-            const isPasswordCorrect = bcrypt.compareSync(password, user.password);
-
-            console.log(isPasswordCorrect);
-            if (!isPasswordCorrect) {
-                response.status(401);
-                response.json({ message: "Auth Failed" });
             } else {
-                jwt.sign(
-                    { email: user.email, role: user.role },
-                    process.env.JWT_KEY,
-                    { expiresIn: "10m" },
-                    (jwtError, token) => {
-                        if (jwtError) {
-                            response.status(500);
-                            response.json({ message: "Erreur serveur" });
-                        } else {
-                            response.status(200);
-                            response.json({ token });
-                        }
-                    }
+                const isPasswordCorrect = bcrypt.compareSync(
+                    password,
+                    user.password
                 );
+                if (!isPasswordCorrect) {
+                    response.status(401);
+                    response.json({ message: "Auth Failed" });
+                } else {
+                    jwt.sign(
+                        { email: user.email },
+                        process.env.JWT_KEY,
+                        { expiresIn: "10m" },
+                        (jwtError, token) => {
+                            if (jwtError) {
+                                response.status(500);
+                                response.json({ message: "Erreur serveur" });
+                            } else {
+                                response.status(200);
+                                response.json({
+                                    token,
+                                    role: user.role,
+                                    last_name: user.last_name,
+                                    first_name: user.first_name
+                                });
+                            }
+                        }
+                    );
+                }
             }
         })
         .catch(error => {
-            console.log(error);
+            console.error(error);
             response.status(500);
             response.json({ message: "Erreur serveur" });
         });

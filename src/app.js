@@ -20,6 +20,18 @@ mongoose.connect(`mongodb://mongo/${process.env.DB_NAME}`);
 // server configuration
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
+// CORS
+server.use((request, response, next) => {
+    response.header(
+        "Access-Control-Allow-Origin", 
+        "http://localhost:4200"
+    );
+    response.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
 // add route to server
 userRoutes(server);
 schoolYearRoute(server);

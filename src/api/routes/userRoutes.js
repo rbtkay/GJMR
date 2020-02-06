@@ -8,7 +8,7 @@ module.exports = app => {
         .post(jwt.verifyAdminToken, user_controller.createUser)
         .put(jwt.verifyAdminToken, user_controller.updateUser)
         .delete(jwt.verifyAdminToken, user_controller.deleteUser);
-    app.get("/user/login", user_controller.userLogin);
+    app.post("/user/login", user_controller.userLogin);
     app.get("/user/role/:user_role", user_controller.userLogin);
     app.get("/user/:user_id", user_controller.getUserById);
     app.get("/teachers_by_modules", user_controller.getTeachersByModules);
