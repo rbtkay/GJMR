@@ -8,22 +8,14 @@ const {
 } = require("../functions/errorManagment");
 
 exports.getModules = (request, response) => {
-    Module.find(
-        request.body
-            ? {
-                  '_id': {
-                      $in: request.body.module_id
-                  }
-              }
-            : {}
-    )
+    Module.find(request.body)
         .then((modules, error) => {
             requestManagment(
                 response,
                 modules,
                 error,
                 "Aucun module n'a été trouvé."
-            );
+            );            
         })
         .catch(error => serverError(error, response));
 };
@@ -43,77 +35,61 @@ exports.getModuleById = (request, response) => {
         .catch(error => serverError(error, response));
 };
 
-//Recuperer les modules d'un intervenant
-exports.getModulesByTeacher = (request, response) => {
-    Module.find({})
-        .then((modules, error) =>
-            requestManagment(
-                response,
-                results,
-                error,
-                "Aucun module n'a été trouvé."
-            )
-        )
-        .catch(error => serverError(error, response));
-};
 
 exports.createModule = (request, response) => {
     let new_module = new Module(request.body);
-   
-    new_module.save()
+       new_module.save()
         .then((module, error) => {
-            if (error) {
+            if(error){
                 response.status(400);
+                response.json({message : 'Il manque des infos'});
                 console.log(error);
-                response.send({
-                    message: "Erreur : Un module de ce nom existe déjà"
-                });
-            } else {
+            }
+            else{
                 response.status(201);
-                response.json(module);
+                response.json({
+                    message : 'Module créé',
+                    module : module
+                });
             }
         })
         .catch(error => serverError(error, response));
-
+    
 };
 
 // mettre à jour un module
 exports.updateModule = (request, response) => {
 
-
     Module.findByIdAndUpdate(request.params.module_id, request.body, { new: true })
         .then((module , error) => {
-            if (error) {
-                response.status(400);
-                console.log(error);
-                response.json({ message: "ID introuvable" });
-            } else {
-                response.status(200);
-                response.json(module);
-            }
+            requestManagment(
+                response,
+                module,
+                error,
+                "Aucune modification a été faite."
+            )
         })
         .catch(error => serverError(error, response));
-
-
-
 };
 
 // supprimer un module
 exports.deleteModule = (request, response) => {
-
     Module.findByIdAndDelete(request.params.module_id)
         .then((module, error) => {
-            if (error) {
+            if(error){
                 response.status(400);
-                response.json({ message: "Id introuvable" });
+                response.json({message : 'Il manque des infos'});
                 console.log(error);
-            } else {
-                response.status(200);
-                response.json(module);
+            }
+            else{
+                response.status(201);
+                response.json({
+                    message : 'Module supprimé',
+                    module : module
+                });
             }
         })
         .catch(error => serverError(error, response));
-
 };
 
 /**
@@ -132,5 +108,20 @@ exports.getModulesIdBySchoolYearId = (request, response) => {
                 "Aucun module n'a été trouvé."
             )
         )
+        .catch(error => serverError(error, response));
+};
+
+//Recuperer les modules d'un intervenant
+exports.getModulesByTeacher = (request, response) => {
+    Module.find({})
+        .then((modules, error) => {
+            requestManagment(
+                response,
+                results,
+                error,
+                "Aucun module n'a été trouvé."
+            )
+
+        })
         .catch(error => serverError(error, response));
 };

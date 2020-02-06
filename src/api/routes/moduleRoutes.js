@@ -11,11 +11,9 @@ module.exports = app => {
         .put(module_controller.updateModule)
         .delete(module_controller.deleteModule);
 
-    app.route("/modules/teachers/:teacher_id").get(
-        module_controller.getModulesByTeacher
-    );
+    app.route("/modules/teachers/:teacher_id")
+        .get(module_controller.getModulesByTeacher);
 
-    app.route("/modules/school_year/:school_year_id").get(
-        module_controller.getModulesIdBySchoolYearId
-    );
+    app.route("/modules/school_year/:school_year_id")
+    .get(module_controller.getModulesIdBySchoolYearId);
 };
