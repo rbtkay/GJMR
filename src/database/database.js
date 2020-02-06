@@ -31,7 +31,7 @@ try {
                 schoolyear = result["ops"].filter(schoolyear => schoolyear.name == "ESIS-aw");
                 students_in_year = students.map(student => ({
                     "student_id": student._id.toString(),
-                    "school_year_id": schoolyear[0]["_id"].toString()
+                    "school_year_id": schoolyear[0]._id.toString()
                 }));
 
                 SchoolYearOfStudentSchema.collection.insertMany(students_in_year).then(result => {
@@ -41,12 +41,12 @@ try {
 
                         ModuleSchema.collection.updateMany(
                             {}, 
-                            { $set: { "teacher_id": teachers[Math.round(Math.random())]._id } }
+                            { $set: { "teacher_id": teachers[0]._id.toString() } }
                         );
 
                         modules_in_year = result["ops"].map((item, i) => ({
                             "module_id": item._id.toString(),
-                            "school_year_id": schoolyear[0]["_id"].toString(),
+                            "school_year_id": schoolyear[0]._id.toString(),
                         }));
 
                         ModuleOfSchoolYear.collection.insertMany(modules_in_year).then(result => {
