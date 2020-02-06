@@ -9,49 +9,45 @@ const SchoolYearOfStudentSchema = require("../api/models/schoolYearOfStudentMode
 const ModuleOfSchoolYear = require("../api/models/moduleOfSchoolYearModel");
 
 try {
-    mongoose.connect((`mongodb://mongo/${process.env.DB_NAME}`), (e) => {
+    mongoose.connect((`mongodb://mongo/${process.env.DB_NAME}`), e => {
         console.log("CONNECTED");
-        var students;
-        var schoolyear;
-        var students_in_year;
-        var modules_in_year;
+        let students;
+        let teachers;
+        let schoolyear;
+        let students_in_year;
+        let modules_in_year;
 
         const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
-        console.log(salt);
         const user_correct_password = json_document["users"].map(user => {
             user["password"] = bcrypt.hashSync("password", salt);
             return user;
-        })
+        });
 
         User.collection.insertMany(user_correct_password).then(result => {
-            students = result["ops"].filter(user => {
-                return (user.role == "student")
-            })
+            students = result["ops"].filter(user => user.role == "student");
+            teachers = result["ops"].filter(user => user.role == "teacher");
 
             SchoolYearSchema.collection.insertMany(json_document["schoolyears"]).then(result => {
-                schoolyear = result["ops"].filter(schoolyear => {
-                    return schoolyear.name == "ESIS-aw"
-                })
-                students_in_year = students.map(student => {
-                    let student_in_year = {
-                        "student_id": student._id.toString(),
-                        "school_year_id": schoolyear[0]["_id"].toString()
-                    }
-                    return student_in_year;
-                })
+                schoolyear = result["ops"].filter(schoolyear => schoolyear.name == "ESIS-aw");
+                students_in_year = students.map(student => ({
+                    "student_id": student._id.toString(),
+                    "school_year_id": schoolyear[0]["_id"].toString()
+                }));
 
                 SchoolYearOfStudentSchema.collection.insertMany(students_in_year).then(result => {
 
                     ModuleSchema.collection.insertMany(json_document["modules"]).then(result => {
-                        console.log("initial modules inserted")
+                        console.log("initial modules inserted");
 
-                        modules_in_year = result["ops"].map(item => {
-                            module_in_year = {
-                                "module_id": item._id.toString(),
-                                "school_year_id": schoolyear[0]["_id"].toString()
-                            }
-                            return module_in_year;
-                        })
+                        ModuleSchema.collection.updateMany(
+                            {}, 
+                            { $set: { "teacher_id": teachers[Math.round(Math.random())]._id } }
+                        );
+
+                        modules_in_year = result["ops"].map((item, i) => ({
+                            "module_id": item._id.toString(),
+                            "school_year_id": schoolyear[0]["_id"].toString(),
+                        }));
 
                         ModuleOfSchoolYear.collection.insertMany(modules_in_year).then(result => {
                             console.log("module inserted in year");
@@ -60,10 +56,10 @@ try {
                                 console.log("connection closed");
                                 console.log(e);
                             });
-                        })
-                    })
-                })
-            })
+                        });
+                    });
+                });
+            });
         }).catch(e => {
             console.log("ERROR!!!!!")
             console.log(e);
