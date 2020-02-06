@@ -89,7 +89,15 @@ exports.getUsers = (request, response) => {
  *  }
  */
 exports.createUser = (request, response) => {
-    let new_user = new User(request.body);
+    let new_user = new User(
+        {
+            email: request.body['email'],
+            last_name: request.body['last_name'],
+            first_name: request.body['first_name'],
+            role: request.body['role'],
+            password: ""
+        }
+    );
 
     const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
     new_user.password = bcrypt.hashSync("password", salt);
