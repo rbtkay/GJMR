@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require("../api/models/userModel");
 const SchoolYearSchema = require("../api/models/schoolYearModel");
 const ModuleSchema = require("../api/models/moduleModel");
+const NoteSchema = require("../api/models/noteModel");
 const SchoolYearOfStudentSchema = require("../api/models/schoolYearOfStudentModel");
 const ModuleOfSchoolYear = require("../api/models/moduleOfSchoolYearModel");
 
@@ -14,6 +15,7 @@ try {
         let students;
         let teachers;
         let schoolyear;
+        let modules;
         let students_in_year;
         let modules_in_year;
 
@@ -38,11 +40,13 @@ try {
 
                     ModuleSchema.collection.insertMany(json_document["modules"]).then(result => {
                         console.log("initial modules inserted");
+                        modules = result["ops"];
+                        console.log(modules);
 
                         ModuleSchema.collection.updateMany(
-                            {}, 
-                            { $set: { "teacher_id": teachers[0]._id.toString() } }
+                            {}, { $set: { "teacher_id": teachers[0]._id.toString() } }
                         );
+                        console.log("teachers inserted in modules");
 
                         modules_in_year = result["ops"].map((item, i) => ({
                             "module_id": item._id.toString(),
@@ -51,6 +55,20 @@ try {
 
                         ModuleOfSchoolYear.collection.insertMany(modules_in_year).then(result => {
                             console.log("module inserted in year");
+                        });
+
+                        NoteSchema.collection.insertMany(json_document["notes"]).then(result => {
+                            console.log("initial notes inserted");
+
+                            NoteSchema.collection.updateMany(
+                                {}, { $set: { "student_id": students[0]._id.toString() } }
+                            );
+                            console.log("students inserted in notes");
+
+                            NoteSchema.collection.updateMany(
+                                {}, { $set: { "module_id": modules[0]._id.toString() } }
+                            );
+                            console.log("modules inserted in notes");
 
                             mongoose.disconnect(e => {
                                 console.log("connection closed");
