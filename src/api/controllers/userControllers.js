@@ -94,6 +94,8 @@ exports.createUser = (request, response) => {
         }
     );
 
+    console.log(new_user);
+
     const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
     new_user.password = bcrypt.hashSync("password", salt);
 
@@ -104,20 +106,20 @@ exports.createUser = (request, response) => {
                 response.status(400);
                 response.json({ message: error });
             } else {
-                response.status(201);
                 user = user.toObject();
                 delete user.password;
                 console.log(user);
                 if (request.body['role'] === 'student') {
                     const newStudentInYearPromise = StudentInSchoolYear.addStudentToSchoolYear({ student_id: user._id, school_year_id: request.body['school_year'] })
                     newStudentInYearPromise.then(result => {
-                        console.log("after promise user")
+                        response.status(201); //FIXME: the status is not returned
                         response.json(user);
                     })
                 }
                 else if (request.body['role'] === ['teacher']) {
                     console.log("after promise student")
                 } else {
+                    response.status(201)
                     response.json(user);
                 }
             }
