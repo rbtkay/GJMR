@@ -111,17 +111,20 @@ exports.getModulesIdBySchoolYearId = (request, response) => {
         .catch(error => serverError(error, response));
 };
 
-//Recuperer les modules d'un intervenant
+/**
+ * Recuperer les modules d'un intervenant
+ * param : teacher_id
+ * return array
+ */
 exports.getModulesByTeacher = (request, response) => {
-    Module.find({})
+    Module.find({ teacher_id: request.params.teacher_id })
         .then((modules, error) => {
             requestManagment(
                 response,
-                results,
+                modules,
                 error,
                 "Aucun module n'a été trouvé."
             )
-
         })
         .catch(error => serverError(error, response));
 };

@@ -24,16 +24,16 @@ exports.removeModuleFromSchoolYear = (request, response) => {
     })
 }
 
-exports.getAllModulesInYear = (request, response) => {
-    ModuleOfSchoolYearSchema.find({ school_year_id: request.body.school_year_id }).then((result) => {
+exports.getModulesInYear = (request, response) => {
+    ModuleOfSchoolYearSchema.find({ school_year_id: request.params.school_year_id }).then((result) => {
 
-        var resultIds = result.map(module_in_year => {
+        let modules_id = result.map(module_in_year => {
             return mongoose.Types.ObjectId(module_in_year.module_id)
         })
-        console.log(resultIds);
+        console.log(modules_id);
         ModuleSchema.find({
             '_id': {
-                $in: resultIds
+                $in: modules_id
             }
         }).then(modules => {
             response.status(200);
