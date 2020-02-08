@@ -8,8 +8,8 @@ const userRoutes = require("./api/routes/userRoutes");
 const moduleRoute = require("./api/routes/moduleRoutes");
 const schoolYearRoute = require("./api/routes/schoolYearRoutes");
 const noteRoute = require("./api/routes/noteRoutes");
-const moduleInSchoolYearRoute = require('./api/routes/modulesInSchoolYearRoutes');
-const studentInYear = require('./api/routes/studentsInSchoolYearRoutes')
+const moduleInSchoolYearRoute = require("./api/routes/modulesInSchoolYearRoutes");
+const studentInYear = require("./api/routes/studentsInSchoolYearRoutes");
 
 // constants
 const hostname = "0.0.0.0";
@@ -22,16 +22,15 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 // CORS
 server.use((request, response, next) => {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    // response.header(
-    //     "Access-Control-Allow-Origin", 
-    //     "http://localhost:4200"
-    // );
-    // response.header(
-    //     "Access-Control-Allow-Headers",
-    //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    // );
+    response.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    response.header(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PATCH, DELETE, HEAD, OPTIONS"
+    );
+    response.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
     next();
 });
 // add route to server
