@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Module = require("../models/moduleModel");
-const ModuleOfSchoolYear = require("../models/moduleOfSchoolYearModel");
+const ModuleInSchoolYear = require("../controllers/moduleOfSchoolYearControllers");
 // fucntions
 const {
     requestManagment,
@@ -15,14 +15,14 @@ exports.getModules = (request, response) => {
                 modules,
                 error,
                 "Aucun module n'a été trouvé."
-            );            
+            );
         })
         .catch(error => serverError(error, response));
 };
 
 // récupérer un module par son id
 exports.getModuleById = (request, response) => {
-    Module.findById(request.params.module_id) 
+    Module.findById(request.params.module_id)
         .then((module, error) => {
             if (!!error) {
                 response.status(400);
@@ -35,33 +35,45 @@ exports.getModuleById = (request, response) => {
         .catch(error => serverError(error, response));
 };
 
+/**
+ * Create a module
+ * 
+ * body{
+ *      name: (string),
+ *      teacher_id: (string)
+ * }
+ */
 
 exports.createModule = (request, response) => {
-    let new_module = new Module(request.body);
-       new_module.save()
-        .then((module, error) => {
-            if(error){
+    let new_module = new Module({
+        name: request.body["module_title"],
+        teacher_id: request.body["teacher_id"]
+    });
+    new_module.save()
+        .then((module_result, error) => {
+            if (error) {
                 response.status(400);
-                response.json({message : 'Il manque des infos'});
+                response.json({ message: 'Il manque des infos' });
                 console.log(error);
             }
-            else{
-                response.status(201);
-                response.json({
-                    message : 'Module créé',
-                    module : module
-                });
+            else {
+                const new_module_in_school_year = ModuleInSchoolYear.addModuleToSchoolYear({ module_id: module_result._id, school_year_id: request.body['school_year'] })
+                new_module_in_school_year.then(result => {
+                    console.log("after promise user")
+                    response.status(201);
+                    response.json(module_result);
+                })
             }
         })
         .catch(error => serverError(error, response));
-    
+
 };
 
 // mettre à jour un module
 exports.updateModule = (request, response) => {
 
     Module.findByIdAndUpdate(request.params.module_id, request.body, { new: true })
-        .then((module , error) => {
+        .then((module, error) => {
             requestManagment(
                 response,
                 module,
@@ -76,16 +88,16 @@ exports.updateModule = (request, response) => {
 exports.deleteModule = (request, response) => {
     Module.findByIdAndDelete(request.params.module_id)
         .then((module, error) => {
-            if(error){
+            if (error) {
                 response.status(400);
-                response.json({message : 'Il manque des infos'});
+                response.json({ message: 'Il manque des infos' });
                 console.log(error);
             }
-            else{
+            else {
                 response.status(201);
                 response.json({
-                    message : 'Module supprimé',
-                    module : module
+                    message: 'Module supprimé',
+                    module: module
                 });
             }
         })

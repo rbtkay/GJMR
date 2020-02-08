@@ -2,17 +2,20 @@ const ModuleOfSchoolYearSchema = require('../models/moduleOfSchoolYearModel');
 const ModuleSchema = require('../models/moduleModel');
 const { requestManagment, serverError } = require("../functions/errorManagment");
 
-exports.addModuleToSchoolYear = (request, response) => {
-    let new_module_in_year = new ModuleOfSchoolYearSchema(request.body);
+exports.addModuleToSchoolYear = (new_module) => {
+    return new Promise((resolve, reject) => {
+        console.log(new_module)
 
-    new_module_in_year.save((error, result) => {
-        if (!!error) {
-            serverError(error, response);
-        } else {
-            response.status(200);
-            response.json(result);
-        }
-    });
+        let module_of_school_year = new ModuleOfSchoolYearSchema(new_module);
+
+        module_of_school_year.save((error, result) => {
+            if (!!error) {
+                reject(false)
+            } else {
+                resolve(true)
+            }
+        });
+    })
 }
 
 exports.removeModuleFromSchoolYear = (request, response) => {

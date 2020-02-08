@@ -22,14 +22,16 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 // CORS
 server.use((request, response, next) => {
-    response.header(
-        "Access-Control-Allow-Origin", 
-        "http://localhost:4200"
-    );
-    response.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    // response.header(
+    //     "Access-Control-Allow-Origin", 
+    //     "http://localhost:4200"
+    // );
+    // response.header(
+    //     "Access-Control-Allow-Headers",
+    //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    // );
     next();
 });
 // add route to server
