@@ -7,6 +7,10 @@ const {
     serverError
 } = require("../functions/errorManagment");
 
+const StudentInSchoolYear = require('./studentInSchoolYearControllers');
+// const  = require('./studentInSchoolYearControllers');
+
+
 /**
  * User login:
  *  body : {
@@ -76,15 +80,24 @@ exports.getUsers = (request, response) => {
  *      email (string)
  *      last_name (string)
  *      first_name (string)
- *      role (string)
+ *      role (string) 
  *  }
  */
 exports.createUser = (request, response) => {
-    let new_user = new User(request.body);
+    let new_user = new User(
+        {
+            email: request.body['email'],
+            last_name: request.body['last_name'],
+            first_name: request.body['first_name'],
+            role: request.body['role'],
+            password: ""
+        }
+    );
 
     const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
     new_user.password = bcrypt.hashSync("password", salt);
 
+    //TODO: Add Verfication for user role before saving
     try {
         new_user.save((error, user) => {
             if (error) {
@@ -94,7 +107,19 @@ exports.createUser = (request, response) => {
                 response.status(201);
                 user = user.toObject();
                 delete user.password;
-                response.json(user);
+                console.log(user);
+                if (request.body['role'] === 'student') {
+                    const newStudentInYearPromise = StudentInSchoolYear.addStudentToSchoolYear({ student_id: user._id, school_year_id: request.body['school_year'] })
+                    newStudentInYearPromise.then(result => {
+                        console.log("after promise user")
+                        response.json(user);
+                    })
+                }
+                else if (request.body['role'] === ['teacher']) {
+                    console.log("after promise student")
+                } else {
+                    response.json(user);
+                }
             }
         });
     } catch (e) {
