@@ -3,7 +3,7 @@ const school_year_controller = require("../controllers/schoolYearControllers");
 const jwt = require("../middlewares/jwtMiddleware");
 
 module.exports = app => {
-    app.route("/school_year/")
+    app.route("/school-year/")
         // set ids in body request to have a specific list of school year
         .get(school_year_controller.getSchoolYears)
         .post(school_year_controller.createSchoolYear)

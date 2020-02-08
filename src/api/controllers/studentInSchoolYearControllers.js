@@ -5,23 +5,28 @@ const UserSchema = require('../models/userModel');
 const { requestManagment, serverError } = require("../functions/errorManagment");
 
 /*
-    body:{
+    new_student:{
         user_id: string
         school_year_id: string,
     }
     adds a student to a year
 */
-exports.addStudentToSchoolYear = (request, response) => {
-    let new_student_in_schoolyear = new SchoolYearOfStudentSchema(request.body);
+exports.addStudentToSchoolYear = (new_student) => {
+    return new Promise((resolve, reject) => {
+        console.log(new_student)
 
-    new_student_in_schoolyear.save((error, result) => {
-        if (!!error) {
-            serverError(error, response);
-        } else {
-            response.status(200);
-            response.json(result);
-        }
-    });
+        let new_student_in_schoolyear = new SchoolYearOfStudentSchema(new_student);
+
+        new_student_in_schoolyear.save((error, result) => {
+            if (!!error) {
+                reject(false)// serverError(error, response);
+            } else {
+                // response.status(200);
+                // response.json(result);
+                resolve(true)
+            }
+        });
+    })
 }
 /*
     body:{
