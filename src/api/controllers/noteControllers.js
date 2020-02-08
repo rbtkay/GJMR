@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 const Note = require("../models/noteModel");
+const {
+    requestManagment,
+    serverError
+} = require("../functions/errorManagment");
 
 /**
  * Get a Note with :
@@ -126,14 +130,14 @@ exports.deleteNote = (request, response) => {
 
 /**
  * Recuperer les notes en fonction de modules
- *  body : {
- *      modules_id (int)
- *  }
+ *  body : [
+ *      module_id (int)
+ *  ]
  */
 exports.getNotesByModulesId = (request, response) => {
     Note.find({
         module_id: {
-            $in: request.body.modules_id
+            $in: request.body
         }
     })
         .then((notes, error) =>
@@ -150,13 +154,13 @@ exports.getNotesByModulesId = (request, response) => {
 /**
  * Get a Notes from students for modules :
  *  student_id (int)
- *  body : {
- *      modules_id (int)
- *  }
+ *  body : [
+ *      module_id (int)
+ *  ]
  */
 exports.getNotesFromModulesAndStudent = (request, response) => {
     Note.find(
-        request.body.modules_id
+        request.body
             ? {
                   module_id: { $in: request.body.modules_id },
                   student_id: request.params.student_id

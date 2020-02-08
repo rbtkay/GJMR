@@ -35,7 +35,7 @@ exports.userLogin = (request, response) => {
                     response.json({ message: "Auth Failed" });
                 } else {
                     jwt.sign(
-                        { email: user.email },
+                        { email: user.email, role: user.role },
                         process.env.JWT_KEY,
                         { expiresIn: "10m" },
                         (jwtError, token) => {
@@ -64,16 +64,7 @@ exports.userLogin = (request, response) => {
 };
 
 exports.getUsers = (request, response) => {
-    console.log(request.body.user_id)
-    User.find(
-        request.body.user_id
-            ? {
-                '_id': {
-                    $in: request.body.user_id
-                }
-            }
-            : {}
-    ).then((users, error) => {
+    User.find({}).then((users, error) => {
         if (!!error) {
             serverError(error, response);
         } else {
@@ -147,7 +138,7 @@ exports.updateUser = (request, response) => {
     const { email, last_name, first_name, role } = new User(request.body);
     const user_id = mongoose.Types.ObjectId(request.body);
 
-    User.findByIdAndUpdate(user_id, {
+    User.findByIdAndUpdate(_id, {
         $set: { email, last_name, first_name, role }
     }) //FIXME: si le document n'exist pas la request time out
         .then(result => {
@@ -192,7 +183,7 @@ exports.getUsersByRole = (request, response) => {
 };
 
 exports.getUserById = (request, response) => {
-    User.findById(request.body.user_id).then((users, error) => {
+    User.findById(request.params.user_id).then((users, error) => {
         if (!!error) {
             serverError(error, response);
         } else {
@@ -202,10 +193,26 @@ exports.getUserById = (request, response) => {
     });
 };
 
+exports.getUsersById = (request, response) => {
+    User.find({
+        _id: {
+            $in: request.body
+        }
+    }).then((users, error) => {
+        if (!!error) {
+            serverError(error, response);
+        } else {
+            response.status(200);
+            response.json(users);
+        }
+    });
+};
+
+// FIXME : module id n'existe pas dans User
 exports.getTeachersByModules = (request, response) => {
     User.find({
         module_id: {
-            $in: request.body.modules_id
+            $in: request.body
         }
     })
         .then((results, error) =>

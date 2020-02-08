@@ -10,10 +10,11 @@ module.exports = app => {
         .delete(school_year_controller.deleteSchoolYear)
         .put(school_year_controller.updateSchoolYear);
 
-    app.route("/school_year/:school_year_id").get(
-        school_year_controller.getSchoolYearById
-    );
     app.route("/school_year/student/:student_id").get(
         school_year_controller.getSchoolYearIdByStudentId
+    );
+
+    app.route("/school_year/:school_year_id").get(
+        school_year_controller.getSchoolYearById
     );
 };
