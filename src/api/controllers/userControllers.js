@@ -8,6 +8,8 @@ const {
 } = require("../functions/errorManagment");
 
 const StudentInSchoolYear = require('./studentInSchoolYearControllers');
+// const  = require('./studentInSchoolYearControllers');
+
 
 /**
  * User login:
@@ -118,11 +120,12 @@ exports.createUser = (request, response) => {
                 if (request.body['role'] === 'student') {
                     const newStudentInYearPromise = StudentInSchoolYear.addStudentToSchoolYear({ student_id: user._id, school_year_id: request.body['school_year'] })
                     newStudentInYearPromise.then(result => {
-                        console.log("after promise")
+                        console.log("after promise user")
                         response.json(user);
                     })
                 }
                 else if (request.body['role'] === ['teacher']) {
+                    console.log("after promise student")
                 } else {
                     response.json(user);
                 }
