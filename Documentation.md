@@ -292,6 +292,7 @@ Result - status code **200**/OK
 <br><br>
 
 les actions mentionnes ci-dessus sont les actions basiques sur lesquelles repose le reste des methods plus complexes presentes dans ce projet.
+<br>
 **user**
 ```
 POST /user/login --> permet a l'utilisateur de recevoir un token et d'acceder a son espace
@@ -317,6 +318,8 @@ DELETE /module_in_schoolyear/ --> Supprime un module d'une certaine annee
 Pour assure la protection des ressources accessible par l'api, un jwt middleware est mit en place. ce middleware est responsable de la vérification du jeton de session envoyer par le client avec sa requête. 
 Lors du login l'utilisateur peu recevoir différent type de jeton (jeton d'admin, jeton d’étudiant ou jeton d'intervenant). ce jeton la déterminera les ressources accessible par l'utilisateur. 
 
+<i>le shema ci dessous apparaitra plus clairement sur markdown reader.</i>
+
 ```mermaid
 graph LR
 A[Client Side] -- requete --> B((Middleware))
@@ -324,6 +327,5 @@ B --> C{isValidToken ?}
 C -- true --> D{FeedbackApi}
 C -- false --> A
 D -- response --> A
-
 ```
 
