@@ -109,12 +109,15 @@ exports.createUser = (request, response) => {
             } else {
                 user = user.toObject();
                 delete user.password;
-                console.log(user);
                 if (request.body['role'] === 'student') {
+                    console.log("requestbody", request.body);
                     const newStudentInYearPromise = StudentInSchoolYear.addStudentToSchoolYear({ student_id: user._id, school_year_id: request.body['school_year'] })
                     newStudentInYearPromise.then(result => {
                         response.status(201); //FIXME: the status is not returned
                         response.json(user);
+                    }).catch(e => {
+                        response.status(500);
+                        response.json({ message: e })
                     })
                 }
                 else if (request.body['role'] === ['teacher']) {
