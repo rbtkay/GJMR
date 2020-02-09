@@ -1,8 +1,8 @@
 # Bienvenue sur FeedBack-ipssi Backend!
 
-Ce projet est une api qui permet la gestion de données concernant le système de "feedback de l’école Ipssi. l'architecture de base est centre sur quatre schémas de données, desquels différentes actions sont possible.
+Ce projet est un api qui permet la gestion de données concernant le système de feedback de l’école ipssi. l'architecture de base est centré sur quatre schémas de données, desquels différentes actions sont possibles.
 
-Dépendamment du token servi a l'utilisateur au moment du login, des droit d'admin, d’élèves ou de prof seront attribues a ce dernier lui permettant l’accès a différentes ressources.
+Dépendamment du token servi a l'utilisateur au moment du login, des droits d'admin, d’élèves ou de prof seront attribués à ce dernier lui permettant l’accès à différentes ressources.
 
 
 ## Entité
@@ -315,10 +315,10 @@ DELETE /module_in_schoolyear/ --> Supprime un module d'une certaine annee
 
 
 # Sécurité
-Pour assure la protection des ressources accessible par l'api, un jwt middleware est mit en place. ce middleware est responsable de la vérification du jeton de session envoyer par le client avec sa requête. 
-Lors du login l'utilisateur peu recevoir différent type de jeton (jeton d'admin, jeton d’étudiant ou jeton d'intervenant). ce jeton la déterminera les ressources accessible par l'utilisateur. 
+Ce projet est une application web construite avec la librairie Javascript, ReactJS. cette application sert d'interface avec laquelle l’école ips s'y peut créer des modules inscrire des élèves à une promotion et assigner des intervenants à des modules créés. Les élèves qu'an à eux peut depuis cette interface notent leur intervenant et laissent un commentaire sur le module donné. Ceci permettra à l’école d’avoir un meilleur suivis des intervenants qu'elle ramène et donc pousser une amélioration au long terme. 
 
-<i>le shema ci dessous apparaitra plus clairement sur markdown reader.</i>
+
+*si le schéma n’apparaît pas correctement veuillez utiliser un markdown editor comme [stackedit.io](https://stackedit.io/)*
 
 ```mermaid
 graph LR
