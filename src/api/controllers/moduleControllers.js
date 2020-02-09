@@ -37,7 +37,7 @@ exports.getModuleById = (request, response) => {
 
 /**
  * Create a module
- * 
+ *
  * body{
  *      name: (string),
  *      teacher_id: (string)
@@ -47,44 +47,51 @@ exports.getModuleById = (request, response) => {
 exports.createModule = (request, response) => {
     console.log("request.body", request.body);
     let new_module = new Module({
-        name: request.body["module_title"],
-        teacher_id: request.body["teacher_id"]
+        name: request.body.name,
+        teacher_id: request.body.teacher_id
     });
-    new_module.save()
+    new_module
+        .save()
         .then((module_result, error) => {
             if (error) {
                 response.status(400);
-                response.json({ message: 'Il manque des infos' });
+                response.json({ message: "Il manque des infos" });
                 console.log(error);
-            }
-            else {
-                console.log("request in controller", request.body)
-                const new_module_in_school_year = ModuleInSchoolYear.addModuleToSchoolYear({ module_id: module_result._id, school_year_id: request.body['school_year'] })
-                new_module_in_school_year.then(result => {
-                    console.log("after promise user", result)
-                    response.status(201);
-                    response.json(module_result);
-                }).catch(e => {
-                    response.status(500);
-                    response.json({ message: "erreur serveur " })
-                })
+            } else {
+                console.log("request in controller", request.body);
+                const new_module_in_school_year = ModuleInSchoolYear.addModuleToSchoolYear(
+                    {
+                        module_id: module_result._id,
+                        school_year_id: request.body.school_year_id
+                    }
+                );
+                new_module_in_school_year
+                    .then(result => {
+                        console.log("after promise user", result);
+                        response.status(201);
+                        response.json(module_result);
+                    })
+                    .catch(e => {
+                        response.status(500);
+                        response.json({ message: "erreur serveur " });
+                    });
             }
         })
         .catch(error => serverError(error, response));
-
 };
 
 // mettre à jour un module
 exports.updateModule = (request, response) => {
-
-    Module.findByIdAndUpdate(request.params.module_id, request.body, { new: true })
+    Module.findByIdAndUpdate(request.params.module_id, request.body, {
+        new: true
+    })
         .then((module, error) => {
             requestManagment(
                 response,
                 module,
                 error,
                 "Aucune modification a été faite."
-            )
+            );
         })
         .catch(error => serverError(error, response));
 };
@@ -95,13 +102,12 @@ exports.deleteModule = (request, response) => {
         .then((module, error) => {
             if (error) {
                 response.status(400);
-                response.json({ message: 'Il manque des infos' });
+                response.json({ message: "Il manque des infos" });
                 console.log(error);
-            }
-            else {
+            } else {
                 response.status(201);
                 response.json({
-                    message: 'Module supprimé',
+                    message: "Module supprimé",
                     module: module
                 });
             }
@@ -141,7 +147,7 @@ exports.getModulesByTeacher = (request, response) => {
                 modules,
                 error,
                 "Aucun module n'a été trouvé."
-            )
+            );
         })
         .catch(error => serverError(error, response));
 };
