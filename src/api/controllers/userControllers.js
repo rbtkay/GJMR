@@ -116,7 +116,7 @@ exports.createUser = (request, response) => {
                     );
                     newStudentInYearPromise
                         .then(result => {
-                            response.status(201); //FIXME: the status is not returned
+                            response.status(201); 
                             response.json(user);
                         })
                         .catch(e => {
