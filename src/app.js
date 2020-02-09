@@ -28,15 +28,15 @@ server.use((request, response, next) => {
         "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
     response.header(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PATCH, DELETE, OPTIONS"
+    );
+    response.header(
         "Access-Control-Allow-Origin",
         "http://localhost:4200"
     );
     if (request.method === "OPTIONS") {
         console.log("in the options")
-        response.header(
-            "Access-Control-Allow-Methods",
-            "DELETE, POST, GET, OPTIONS"
-        );
     }
     next();
 });
