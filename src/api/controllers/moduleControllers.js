@@ -43,7 +43,6 @@ exports.getModuleById = (request, response) => {
  *      teacher_id: (string)
  * }
  */
-
 exports.createModule = (request, response) => {
     console.log("request.body", request.body);
     let new_module = new Module({
@@ -112,25 +111,6 @@ exports.deleteModule = (request, response) => {
                 });
             }
         })
-        .catch(error => serverError(error, response));
-};
-
-/**
- * params : school_year_id
- * return array
- */
-exports.getModulesIdBySchoolYearId = (request, response) => {
-    ModuleOfSchoolYear.find({
-        school_year_id: request.params.school_year_id
-    })
-        .then((results, error) =>
-            requestManagment(
-                response,
-                results,
-                error,
-                "Aucun module n'a été trouvé."
-            )
-        )
         .catch(error => serverError(error, response));
 };
 

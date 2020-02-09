@@ -9,27 +9,29 @@ const {
  * Get a Note with :
  *  note_id (int)
  */
+exports.getNotes = (request, response) => {
+    Note.find({})
+        .then((notes, error) =>
+            requestManagment(
+                response,
+                notes,
+                error,
+                "Aucune note n'a été trouvée."
+            )
+        )
+        .catch(error => serverError(error, response));
+};
+
+/**
+ * Get a Note with :
+ *  note_id (int)
+ */
 exports.getNote = (request, response) => {
     Note.findById(request.params.note_id)
-        .then((error, note) => {
-            if (error) {
-                response.status(400);
-                console.log(error);
-                response.json({
-                    message: "Note introuvable"
-                });
-            } else {
-                response.status(200);
-                response.json(note);
-            }
-        })
-        .catch(error => {
-            response.status(500);
-            console.log(error);
-            response.json({
-                message: "Erreur serveur"
-            });
-        });
+        .then((note, error) =>
+            requestManagment(response, note, error, "Note introuvable")
+        )
+        .catch(error => serverError(error, response));
 };
 
 /**
@@ -45,7 +47,7 @@ exports.getNote = (request, response) => {
 exports.createNote = (request, response) => {
     new Note(request.body)
         .save()
-        .then((error, note) => {
+        .then((note, error) => {
             if (error) {
                 response.status(400);
                 console.log(error);
@@ -75,9 +77,18 @@ exports.createNote = (request, response) => {
  *  }
  */
 exports.updateNote = (request, response) => {
-    Note.findByIdAndUpdate(request.params.note_id, request.body, {
-        new: true
-    })
+    Note.findByIdAndUpdate(
+        request.body._id,
+        {
+            $set: {
+                value: request.body.note,
+                comment: request.body.comment
+            }
+        },
+        {
+            new: true
+        }
+    )
         .then((error, note) => {
             if (error) {
                 response.status(400);
@@ -162,7 +173,7 @@ exports.getNotesFromModulesAndStudent = (request, response) => {
     Note.find(
         request.body
             ? {
-                  module_id: { $in: request.body.modules_id },
+                  module_id: { $in: request.body },
                   student_id: request.params.student_id
               }
             : { student_id: request.params.student_id }
