@@ -29,7 +29,7 @@ exports.createSchoolYear = (request, response) => {
     new_school_year
         .save()
         .then((school_year, error) => {
-            response.status(200);
+            response.status(201);
             response.json(school_year);
         })
         .catch(error => {
