@@ -5,9 +5,9 @@ const jwt = require("../middlewares/jwtMiddleware");
 module.exports = app => {
     app.route("/school-year/")
         // set ids in body request to have a specific list of school year
-        .get(school_year_controller.getSchoolYears)
-        .post(school_year_controller.createSchoolYear)
-        .put(school_year_controller.updateSchoolYear);
+        .get(jwt.verifyToken,school_year_controller.getSchoolYears)
+        .post(jwt.verifyAdminToken, school_year_controller.createSchoolYear)
+        .put(jwt.verifyAdminToken, school_year_controller.updateSchoolYear);
 
     app.route("/school_year/student/:student_id").get(
         school_year_controller.getSchoolYearIdByStudentId
