@@ -23,15 +23,13 @@ exports.addModuleToSchoolYear = new_module => {
 };
 
 exports.removeModuleFromSchoolYear = (request, response) => {
-    ModuleOfSchoolYearSchema.findOneAndDelete({
-        module_id: request.body.module_id,
-        }).then(result => {
-            resolve(true)
-        }).catch(e => {
-            reject(false);
-        });
+    ModuleOfSchoolYearSchema.findOneAndDelete({ module_id: request.body.module_id, school_year_id: request.body.school_year_id }).then((result) => {
+        response.status(200);
+        response.json({ message: "Document deleted" });
+    }).catch(e => {
+        serverError(error, response);
     })
-};
+}
 
 exports.getModulesInYear = (request, response) => {
     ModuleOfSchoolYearSchema.find({
