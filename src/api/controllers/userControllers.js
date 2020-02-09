@@ -166,9 +166,15 @@ exports.updateUser = (request, response) => {
  *  }
  */
 exports.deleteUser = (request, response) => {
-    User.findByIdAndDelete(request.body.user_id, (error, result) => {
-        response.status(200);
-        response.json({ message: 'user deleted' });
+    User.findByIdAndDelete(request.params.user_id, (error, result) => {
+        if(error){
+            response.status(400);
+            console.error(error);
+            response.json({ message: "deletion failed" });
+        }else{
+            response.status(200);
+            response.json({ message: "user deleted properly" });
+        }
     }).catch(error => {
         serverError(error, response);
     });
