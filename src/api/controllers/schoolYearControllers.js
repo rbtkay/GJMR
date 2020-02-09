@@ -45,7 +45,7 @@ exports.createSchoolYear = (request, response) => {
  *  }
  */
 exports.deleteSchoolYear = (request, response) => {
-    SchoolYear.findByIdAndDelete(request.body.school_year_id)
+    SchoolYear.findByIdAndDelete(request.params.school_year_id)
         .then((result, error) => {
             response.status(200);
             response.json({ message: "school_year deleted properly" });
