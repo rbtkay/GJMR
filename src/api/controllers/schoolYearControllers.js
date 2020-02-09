@@ -61,11 +61,23 @@ exports.deleteSchoolYear = (request, response) => {
 exports.getSchoolYears = (request, response) => {
     SchoolYear.find()
         .then((school_years, error) => {
+
+            result = school_years.map(year => {
+                year = {
+                    _id: year._id,
+                    name: year.name,
+                    start_date: year.start_date.toString().split("00:00:00")[0],
+                    end_date: year.end_date.toString().split("00:00:00")[0]
+                };
+                return year
+            })
+
             response.status(200);
-            response.json(school_years);
+
+            response.json(result);
         })
         .catch(e => {
-            serverError(error, response);
+            serverError(e, response);
         });
 };
 
@@ -86,10 +98,19 @@ exports.updateSchoolYear = (request, response) => {
 };
 
 exports.getSchoolYearById = (request, response) => {
-    SchoolYear.findById(equest.params.school_year_id)
-        .then((result, error) =>
-            requestManagment(response, result, error, "Promotion introuvable.")
-        )
+    SchoolYear.findById(request.params.school_year_id)
+        .then((year, error) => {
+            const result = {
+                _id: year._id,
+                name: year.name,
+                start_date: year.start_date.toString().split("00:00:00")[0],
+                end_date: year.end_date.toString().split("00:00:00")[0]
+            };
+
+            response.status(200);
+
+            response.json(result);
+        })
         .catch(error => serverError(error, response));
 };
 

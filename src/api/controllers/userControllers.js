@@ -116,7 +116,7 @@ exports.createUser = (request, response) => {
                     );
                     newStudentInYearPromise
                         .then(result => {
-                            response.status(201); //FIXME: the status is not returned
+                            response.status(201); 
                             response.json(user);
                         })
                         .catch(e => {
@@ -168,7 +168,7 @@ exports.updateUser = (request, response) => {
 exports.deleteUser = (request, response) => {
     User.findByIdAndDelete(request.body.user_id, (error, result) => {
         response.status(200);
-        response.json({ message: "user deleted properly" });
+        response.json({ message: 'user deleted' });
     }).catch(error => {
         serverError(error, response);
     });

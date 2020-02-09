@@ -52,7 +52,7 @@ exports.verifyStudentToken = (request, response, next) => {
 
   if (token) {
     jwt.verify(token, process.env.JWT_KEY, { ignoreExpiration: true }, (error, token) => {
-      if (error || token.role != "admin") {
+      if (error || token.role != "student") {
         response.status(403);
         response.json({ message: "Unauthorized" });
       }
