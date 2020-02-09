@@ -45,6 +45,7 @@ exports.getModuleById = (request, response) => {
  */
 
 exports.createModule = (request, response) => {
+    console.log("request.body", request.body);
     let new_module = new Module({
         name: request.body["module_title"],
         teacher_id: request.body["teacher_id"]
@@ -57,11 +58,15 @@ exports.createModule = (request, response) => {
                 console.log(error);
             }
             else {
+                console.log("request in controller", request.body)
                 const new_module_in_school_year = ModuleInSchoolYear.addModuleToSchoolYear({ module_id: module_result._id, school_year_id: request.body['school_year'] })
                 new_module_in_school_year.then(result => {
-                    console.log("after promise user")
+                    console.log("after promise user", result)
                     response.status(201);
                     response.json(module_result);
+                }).catch(e => {
+                    response.status(500);
+                    response.json({ message: "erreur serveur " })
                 })
             }
         })
